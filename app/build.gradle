@@ -1,0 +1,260 @@
+/*
+ *  Copyright 2023 CNM Ingenuity, Inc.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+//file:noinspection unused
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.navigation.safeargs)
+    alias(libs.plugins.schema.parser)
+    alias(libs.plugins.junit)
+}
+
+android {
+
+    namespace = project.basePackageName
+    compileSdkVersion = project.targetSdk.toInteger()
+
+    defaultConfig {
+
+        applicationId = project.basePackageName
+        minSdkVersion(project.minSdk.toInteger())
+        targetSdkVersion(project.targetSdk.toInteger())
+        versionCode(project.versionCode.toInteger())
+        versionName = project.versionName
+
+        testInstrumentationRunner = 'androidx.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunnerArgument(
+                'runnerBuilder', 'de.mannodermaus.junit5.AndroidJUnit5Builder')
+
+        resValue('string', 'app_name', project.appName)
+        resValue('string', 'client_id', getLocalProperty('client_id') ?: '')
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        'room.schemaLocation'  : "$projectDir/schemas".toString(),
+                        'room.incremental'     : 'true',
+                        'room.expandProjection': 'true'
+                ]
+            }
+        }
+
+    }
+
+    //noinspection GroovyAssignabilityCheck
+    buildTypes {
+        release {
+            minifyEnabled(false)
+            proguardFiles(
+                    getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.valueOf("VERSION_${libs.versions.java.get()}")
+        targetCompatibility = JavaVersion.valueOf("VERSION_${libs.versions.java.get()}")
+    }
+
+    buildFeatures {
+        viewBinding = true
+        // Enable dataBinding if needed.
+        // dataBinding true
+    }
+
+}
+
+dependencies {
+
+    // .jar-based libraries included in project
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    // Basic Android components
+    implementation(libs.app.compat)
+    implementation(libs.constraint.layout)
+    implementation(libs.recycler.view)
+
+    // Fragment & navigation framework libraries
+    implementation(libs.fragment)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+
+    // Lifecycle (LiveData and ViewModel) libraries
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.livedata)
+
+    // Preferences/settings components
+    implementation(libs.preference)
+
+    // Material Design components
+    implementation(libs.material)
+
+    // ReactiveX libraries
+    implementation(libs.rx.java)
+    implementation(libs.rx.android)
+
+    // Room annotation processor, runtime library, and ReactiveX integration
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    implementation(libs.room.rx.java)
+
+    // Gson (Google JSON parser) library
+    implementation(libs.gson)
+
+    // Google Sign-in library
+    implementation(libs.play.auth)
+
+    // Retrofit (REST client) with ReactiveX & Gson integration
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.adapter.rx.java)
+
+    // Picasso image retrieval library
+    implementation(libs.picasso)
+
+    // Hilt dependency-injection library & annotation processor
+    implementation(libs.hilt.android.core)
+    annotationProcessor(libs.hilt.compiler)
+
+    // OkHttp logging dependency
+    implementation(libs.logging.interceptor)
+
+    // Stetho (inspection) dependency
+    implementation(libs.stetho)
+
+    // Libraries for JVM-based testing.
+    testImplementation(libs.junit.api)
+    testImplementation(libs.junit.params)
+    testRuntimeOnly(libs.junit.engine)
+
+    // Libraries for instrumented (run in Android) testing.
+    androidTestImplementation(libs.test.runner)
+    androidTestImplementation(libs.junit.android.core)
+    androidTestRuntimeOnly(libs.junit.android.runner)
+    androidTestImplementation(libs.junit.api)
+    androidTestImplementation(libs.junit.params)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestAnnotationProcessor(libs.hilt.compiler)
+    androidTestAnnotationProcessor(libs.hilt.android.compiler)
+
+    constraints {
+        //noinspection ForeignDelegate
+        implementation(libs.kotlin.jdk7) {
+            //noinspection GroovyAssignabilityCheck
+            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+        }
+        //noinspection ForeignDelegate
+        implementation(libs.kotlin.jdk8) {
+            //noinspection GroovyAssignabilityCheck
+            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+        }
+    }
+}
+
+clean {
+    delete += file("$projectDir/../docs/api")
+}
+
+roomDdl {
+    source = "$projectDir/schemas/edu.cnm.deepdive.appstarter.service.LocalDatabase/1.json"
+    destination = "$projectDir/../docs/sql/ddl.sql"
+}
+
+tasks.register('generateApiDoc') {
+    group = "reporting"
+    description = "Generates all Javadoc."
+}
+
+android.applicationVariants.configureEach { variant ->
+
+    //noinspection ConfigurationAvoidance
+    def task = project.tasks.create("generate${variant.name.capitalize()}Javadoc", Javadoc) {
+
+        title = "$appName (${android.defaultConfig.versionName})"
+        group = "ApiDoc"
+        description = "Generates Javadoc for $variant.name."
+
+        source = variant
+                .sourceSets
+                .collect { it.java.sourceFiles }
+                .inject { m, i -> m + i }
+
+        doFirst {
+            //noinspection GroovyAssignabilityCheck
+            classpath = project.files(
+                    file(projectDir)
+                            .toPath()
+                            .resolve("build/intermediates/javac/${variant.name}/classes"),
+                    variant.javaCompileProvider.get().classpath.files,
+                    android.getBootClasspath()
+            )
+        }
+
+        exclude '**/R'
+        exclude '**/R.**'
+        exclude '**/R\$**'
+        exclude '**/BuildConfig*'
+
+        destinationDir = file("$projectDir/../docs/api")
+
+        //noinspection GroovyAssignabilityCheck
+        options {
+            windowTitle = "$appName ($versionName)"
+            memberLevel = JavadocMemberLevel.PROTECTED
+            linkSource = true
+            author = false
+            ((StandardJavadocDocletOptions) options).with {
+                links "https://docs.oracle.com/en/java/javase/${libs.versions.java.get()}/docs/api/"
+                linksOffline 'https://developer.android.com/reference', "$projectDir/.."
+                // Modify the items below for specific libraries used.
+                links 'https://reactivex.io/RxJava/3.x/javadoc/'
+                links "https://javadoc.io/doc/com.google.dagger/dagger/${libs.versions.hilt.get()}/"
+                links "https://javadoc.io/doc/com.google.code.gson/gson/${libs.versions.gson.get()}/"
+                links 'https://square.github.io/retrofit/2.x/retrofit/'
+                links 'https://square.github.io/picasso/2.x/picasso/'
+                addBooleanOption('html5', true)
+                addStringOption('Xdoclint:none', '-quiet')
+            }
+        }
+
+        failOnError = true
+
+    }
+
+    task.dependsOn "assemble${variant.name.capitalize()}"
+    generateApiDoc.dependsOn task
+
+}
+
+String getLocalProperty(String name) {
+    return getProperty("$projectDir/local.properties".toString(), name)
+}
+
+static String getProperty(String filename, String name) {
+    String value
+    try (def input = new FileInputStream(filename)) {
+        def props = new Properties()
+        props.load(input)
+        value = props.getProperty(name)
+    } catch (Exception ignored) {
+        value = null
+    }
+    return value
+}
+
+static String quoted(String input) {
+    return "\"$input\""
+}
