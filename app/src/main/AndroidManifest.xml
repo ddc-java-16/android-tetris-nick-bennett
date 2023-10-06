@@ -27,14 +27,14 @@
     android:allowBackup="false"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
-    android:name=".AppStarterApplication"
+    android:name="edu.cnm.deepdive.tetris.TetrisApplication"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="AllowBackup,DataExtractionRules">
 
     <activity
-      android:name=".controller.LoginActivity"
+      android:name="edu.cnm.deepdive.tetris.controller.LoginActivity"
       android:exported="true">
 
       <intent-filter>
@@ -45,12 +45,12 @@
     </activity>
 
     <activity
-      android:name=".controller.MainActivity"
+      android:name="edu.cnm.deepdive.tetris.controller.MainActivity"
       android:launchMode="singleTop"/>
 
     <activity
-      android:name=".controller.SettingsActivity"
-      android:parentActivityName=".controller.MainActivity"
+      android:name="edu.cnm.deepdive.tetris.controller.SettingsActivity"
+      android:parentActivityName="edu.cnm.deepdive.tetris.controller.MainActivity"
       android:label="@string/settings_label"/>
 
   </application>

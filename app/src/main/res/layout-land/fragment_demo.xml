@@ -21,7 +21,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:padding="@dimen/half_dynamic_spacing"
-  tools:context=".controller.MainActivity">
+  tools:context="edu.cnm.deepdive.tetris.controller.MainActivity">
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/local_display_name_layout"
