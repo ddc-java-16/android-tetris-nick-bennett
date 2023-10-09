@@ -19,6 +19,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import edu.cnm.deepdive.tetris.databinding.FragmentDemoBinding;
 import edu.cnm.deepdive.tetris.model.entity.User;
 import edu.cnm.deepdive.tetris.viewmodel.LoginViewModel;
 import edu.cnm.deepdive.tetris.viewmodel.PermissionsViewModel;
+import edu.cnm.deepdive.tetris.viewmodel.PlayingFieldViewModel;
 import edu.cnm.deepdive.tetris.viewmodel.PreferencesViewModel;
 import edu.cnm.deepdive.tetris.viewmodel.UserViewModel;
 import java.util.Objects;
@@ -87,6 +89,7 @@ public class DemoFragment extends Fragment {
     setupUserViewModel(provider, owner);
     setupPermissionsViewModel(provider, owner);
     setupPreferencesViewModel(provider, owner);
+    setupPlayingFieldViewModel(provider, owner);
   }
 
   @Override
@@ -133,6 +136,21 @@ public class DemoFragment extends Fragment {
         .get(PreferencesViewModel.class)
         .getSelectableTextPreference()
         .observe(owner, this::handleSelectableTextPreference);
+  }
+
+  private void setupPlayingFieldViewModel(ViewModelProvider provider, LifecycleOwner owner) {
+    provider
+        .get(PlayingFieldViewModel.class)
+        .getPlayingField()
+        .observe(owner, (playingField) -> {
+          Log.d(getClass().getSimpleName(), "Playing field updated!");
+        });
+    provider
+        .get(PlayingFieldViewModel.class)
+        .getDealer()
+        .observe(owner, (dealer) -> {
+          Log.d(getClass().getSimpleName(), "Dealer updated!");
+        });
   }
 
   private void handleAccount(GoogleSignInAccount account) {
