@@ -32,7 +32,6 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
   private final MutableLiveData<Throwable> throwable;
   private final CompositeDisposable pending;
 
-  private int playingFieldWidth;
   private final String playingFieldWidthKey;
   private final int playingFieldWidthDefault;
 
@@ -47,14 +46,7 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
     playingFieldWidthDefault = resources.getInteger(R.integer.playing_field_width_default);
-    playingFieldWidth = playingFieldWidthDefault;
     playingFieldWidthKey = resources.getString(R.string.playing_field_width_key);
-    preferencesRepository.registerPreferencesChangedListener((prefs, key) -> {
-      if (key.equals(playingFieldWidthKey)) {
-        playingFieldWidth = prefs.getInt(playingFieldWidthKey, playingFieldWidthDefault);
-        // TODO: 10/10/23 Check to see if we should create a new playing field. 
-      }
-    });
     create();
   }
 
@@ -71,7 +63,8 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
   }
 
   public void create() {
-    Disposable disposable = playingFieldRepository.create(25, playingFieldWidth, 5, 5) // FIXME: 10/9/23 Replace with values from preferences.
+    int width = preferencesRepository.get(playingFieldWidthKey, playingFieldWidthDefault);
+    Disposable disposable = playingFieldRepository.create(25, width, 5, 5) // FIXME: 10/9/23 Replace with values from preferences.
         .subscribe(
             () -> {},
             throwable::postValue

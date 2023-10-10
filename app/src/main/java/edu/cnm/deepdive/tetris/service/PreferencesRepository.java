@@ -58,8 +58,9 @@ public class PreferencesRepository {
     return preferences;
   }
 
-  public void registerPreferencesChangedListener(OnSharedPreferenceChangeListener listener) {
-    prefs.registerOnSharedPreferenceChangeListener(listener);
+  public <T> T get(String key, T defaultValue) {
+    T result = (T) prefs.getAll().get(key);
+    return (result != null) ? result : defaultValue;
   }
 
 }
