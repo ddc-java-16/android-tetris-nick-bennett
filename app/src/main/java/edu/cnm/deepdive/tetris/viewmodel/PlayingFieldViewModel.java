@@ -25,13 +25,10 @@ import org.jetbrains.annotations.NotNull;
 @HiltViewModel
 public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycleObserver {
 
-  private final Context context;
-  private final Resources resources;
   private final PlayingFieldRepository playingFieldRepository;
   private final PreferencesRepository preferencesRepository;
   private final MutableLiveData<Throwable> throwable;
   private final CompositeDisposable pending;
-
   private final String playingFieldWidthKey;
   private final int playingFieldWidthDefault;
 
@@ -39,12 +36,11 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
   PlayingFieldViewModel(@ApplicationContext Context context,
       PlayingFieldRepository playingFieldRepository,
       PreferencesRepository preferencesRepository) {
-    this.context = context;
-    this.resources = context.getResources();
     this.playingFieldRepository = playingFieldRepository;
     this.preferencesRepository = preferencesRepository;
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
+    Resources resources = context.getResources();
     playingFieldWidthDefault = resources.getInteger(R.integer.playing_field_width_default);
     playingFieldWidthKey = resources.getString(R.string.playing_field_width_key);
     create();
