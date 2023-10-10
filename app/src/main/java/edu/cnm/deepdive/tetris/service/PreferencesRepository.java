@@ -34,17 +34,16 @@ import kotlin.jvm.functions.Function1;
  * (such as {@link SettingsFragment}).
  */
 @Singleton
-public class PreferencesRepository implements OnSharedPreferenceChangeListener {
+public class PreferencesRepository {
 
   private final MutableLiveData<SharedPreferences> preferences;
+  private final SharedPreferences prefs;
 
   @Inject
   PreferencesRepository(@ApplicationContext Context context) {
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-    preferences = new MutableLiveData<>(sharedPrefs);
-    PreferenceManager
-        .getDefaultSharedPreferences(context)
-        .registerOnSharedPreferenceChangeListener(this);
+    prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    preferences = new MutableLiveData<>(prefs);
+    prefs.registerOnSharedPreferenceChangeListener((prefs, key) -> preferences.postValue(prefs));
   }
 
   /**
@@ -52,15 +51,15 @@ public class PreferencesRepository implements OnSharedPreferenceChangeListener {
    * the user in a {@link androidx.preference.PreferenceFragmentCompat} subclass instance. A
    * viewmodel should then use {@link androidx.lifecycle.Transformations#map(LiveData, Function1)}
    * (or a similar mechanism) to map the entire {@link SharedPreferences} instance in the
-   * {@link LiveData} returned by this method to {@link LiveData} fields for individual preferences.
+   * {@link LiveData} returned by this method to {@link LiveData} fields for individual
+   * preferences.
    */
   public LiveData<SharedPreferences> getPreferences() {
     return preferences;
   }
 
-  @Override
-  public void onSharedPreferenceChanged(SharedPreferences preferences, String ignoredKey) {
-    this.preferences.postValue(preferences);
+  public void registerPreferencesChangedListener(OnSharedPreferenceChangeListener listener) {
+    prefs.registerOnSharedPreferenceChangeListener(listener);
   }
 
 }

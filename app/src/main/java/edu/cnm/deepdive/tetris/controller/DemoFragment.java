@@ -22,6 +22,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -67,6 +68,7 @@ public class DemoFragment extends Fragment {
   private int cancelColor;
   @ColorInt
   private int disabledColor;
+  private PlayingFieldViewModel playingFieldViewModel;
 
   @Nullable
   @Override
@@ -108,6 +110,7 @@ public class DemoFragment extends Fragment {
     binding.localDisplayName.addTextChangedListener(new DisplayNameWatcher());
     binding.save.setOnClickListener((v) -> saveChanges());
     binding.cancel.setOnClickListener((v) -> cancelChanges());
+    binding.create.setOnClickListener((v) -> playingFieldViewModel.create());
   }
 
   private void setupLoginViewModel(ViewModelProvider provider, LifecycleOwner owner) {
@@ -136,17 +139,21 @@ public class DemoFragment extends Fragment {
         .get(PreferencesViewModel.class)
         .getSelectableTextPreference()
         .observe(owner, this::handleSelectableTextPreference);
+    provider
+        .get(PreferencesViewModel.class)
+        .getPlayingFieldWidthPreference()
+        .observe(owner, (width) -> Log.d(getClass().getSimpleName(), "Width = " + width));
   }
 
   private void setupPlayingFieldViewModel(ViewModelProvider provider, LifecycleOwner owner) {
-    provider
-        .get(PlayingFieldViewModel.class)
+    playingFieldViewModel = provider
+        .get(PlayingFieldViewModel.class);
+    playingFieldViewModel
         .getPlayingField()
         .observe(owner, (playingField) -> {
-          Log.d(getClass().getSimpleName(), "Playing field updated!");
+          Log.d(getClass().getSimpleName(), "Playing field updated! Width = " + playingField.getWidth());
         });
-    provider
-        .get(PlayingFieldViewModel.class)
+    playingFieldViewModel
         .getDealer()
         .observe(owner, (dealer) -> {
           Log.d(getClass().getSimpleName(), "Dealer updated!");

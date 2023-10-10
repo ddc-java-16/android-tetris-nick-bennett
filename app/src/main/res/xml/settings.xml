@@ -15,7 +15,8 @@
   limitations under the License.
 -->
 <PreferenceScreen
-  xmlns:android="http://schemas.android.com/apk/res/android">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <SwitchPreference
     android:key="@string/selectable_text_pref_key"
@@ -23,5 +24,13 @@
     android:summaryOn="@string/selectable_text_pref_summary_on"
     android:summaryOff="@string/selectable_text_pref_summary_off"
     android:defaultValue="@bool/selectable_text_pref_default"/>
+
+  <SeekBarPreference
+    android:key="@string/playing_field_width_key"
+    android:title="@string/playing_field_width_title"
+    app:min="@integer/playing_field_width_min"
+    android:max="@integer/playing_field_width_max"
+    android:defaultValue="@integer/playing_field_width_default"
+    app:showSeekBarValue="true"/>
 
 </PreferenceScreen>

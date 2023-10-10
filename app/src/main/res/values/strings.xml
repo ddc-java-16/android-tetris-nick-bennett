@@ -37,5 +37,7 @@
   <string name="selectable_text_pref_title">Selectable text</string>
   <string name="selectable_text_pref_summary_on">Uneditable text is selectable.</string>
   <string name="selectable_text_pref_summary_off">Uneditable text is not selectable.</string>
+  <string name="playing_field_width_key">playing_field_width</string>
+  <string name="playing_field_width_title">Playing field width</string>
 
 </resources>

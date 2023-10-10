@@ -42,6 +42,7 @@ import kotlin.jvm.functions.Function1;
 public class PreferencesViewModel extends ViewModel implements DefaultLifecycleObserver {
 
   private final LiveData<Boolean> selectableTextPreference;
+  private final LiveData<Integer> playingFieldWidthPreference;
 
   // TODO Declare additional LiveData fields for individual preferences as necessary.
 
@@ -49,6 +50,7 @@ public class PreferencesViewModel extends ViewModel implements DefaultLifecycleO
   PreferencesViewModel(@ApplicationContext Context context, PreferencesRepository repository) {
     LiveData<SharedPreferences> prefs = repository.getPreferences();
     selectableTextPreference = selectableTextPreferenceLiveData(context, prefs);
+    playingFieldWidthPreference = playingFieldWidthPrefLiveData(context, prefs);
     // TODO Initialize additional LiveData fields (as needed) for other individual preferences.
   }
 
@@ -60,6 +62,10 @@ public class PreferencesViewModel extends ViewModel implements DefaultLifecycleO
     return selectableTextPreference;
   }
 
+  public LiveData<Integer> getPlayingFieldWidthPreference() {
+    return playingFieldWidthPreference;
+  }
+
   private LiveData<Boolean> selectableTextPreferenceLiveData(Context context,
       LiveData<SharedPreferences> preferences) {
     String selectableTextPrefKey = context.getString(R.string.selectable_text_pref_key);
@@ -68,6 +74,14 @@ public class PreferencesViewModel extends ViewModel implements DefaultLifecycleO
         .getBoolean(R.bool.selectable_text_pref_default);
     return Transformations.map(preferences,
         (prefs) -> prefs.getBoolean(selectableTextPrefKey, selectableTextPrefDefault));
+  }
+
+  private LiveData<Integer> playingFieldWidthPrefLiveData(
+      Context context, LiveData<SharedPreferences> preferences) {
+    String playingFieldWidthPrefKey = context.getString(R.string.playing_field_width_key);
+    int playingFieldWidthPrefDefault = context.getResources().getInteger(R.integer.playing_field_width_default);
+    return Transformations.map(preferences,
+        (prefs) -> prefs.getInt(playingFieldWidthPrefKey, playingFieldWidthPrefDefault));
   }
 
   // TODO Following the example of the selectableTextPreferenceLiveData method, define additional

@@ -9,11 +9,7 @@ import edu.cnm.deepdive.tetris.model.Field;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.functions.Function;
-import io.reactivex.rxjava3.functions.Supplier;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import java.security.SecureRandom;
-import java.util.Optional;
 import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -27,8 +23,8 @@ public class PlayingFieldRepository {
   private final Scheduler scheduler;
 
   @Inject
-  PlayingFieldRepository(@ApplicationContext Context context) {
-    this.rng = new SecureRandom();
+  PlayingFieldRepository(@ApplicationContext Context context, Random rng) {
+    this.rng = rng;
     playingField = new MutableLiveData<>();
     dealer = new MutableLiveData<>();
     scheduler = Schedulers.single();

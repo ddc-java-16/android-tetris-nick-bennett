@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <integer name="playing_field_width_min">8</integer>
+  <integer name="playing_field_width_max">20</integer>
+  <integer name="playing_field_width_default">12</integer>
+</resources>
