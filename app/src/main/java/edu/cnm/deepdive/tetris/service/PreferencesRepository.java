@@ -59,6 +59,7 @@ public class PreferencesRepository {
   }
 
   public <T> T get(String key, T defaultValue) {
+    //noinspection unchecked
     T result = (T) prefs.getAll().get(key);
     return (result != null) ? result : defaultValue;
   }
