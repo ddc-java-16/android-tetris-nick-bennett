@@ -32,7 +32,7 @@ import javax.inject.Singleton;
 
 /**
  * Provides high-level operations on a repository of {@link User} instances, backed by a SQLite
- * database, in turn accessed via {@link LocalDatabase}. This class has no mutable state, and its
+ * database, in turn accessed via {@link TetrisDatabase}. This class has no mutable state, and its
  * methods are thread-safe; however, mutating operations (involving {@code INSERT}, {@code UPDATE},
  * or {@code DELETE} on the underlying database) attempted simultaneously could block or fail.
  */

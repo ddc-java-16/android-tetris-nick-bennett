@@ -36,7 +36,7 @@ public class PlayingFieldRepository {
             Single.fromSupplier(() -> new Field(height, width, bufferSize, dealer))
                 .doAfterSuccess((ignored) -> this.dealer.postValue(dealer))
         )
-        .doAfterSuccess((field) -> playingField.postValue(field))
+        .doAfterSuccess(playingField::postValue)
         .ignoreElement()
         .subscribeOn(scheduler);
   }

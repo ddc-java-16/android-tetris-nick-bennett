@@ -22,9 +22,11 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+import edu.cnm.deepdive.tetris.model.dao.ScoreDao;
 import edu.cnm.deepdive.tetris.model.dao.UserDao;
+import edu.cnm.deepdive.tetris.model.entity.Score;
 import edu.cnm.deepdive.tetris.model.entity.User;
-import edu.cnm.deepdive.tetris.service.LocalDatabase.Converters;
+import edu.cnm.deepdive.tetris.service.TetrisDatabase.Converters;
 import java.time.Instant;
 
 /**
@@ -32,16 +34,16 @@ import java.time.Instant;
  * using data-access object (DAO) instances obtained from the singleton instance of this class.
  */
 @Database(
-    entities = {User.class},
+    entities = {User.class, Score.class},
     version = 1
 )
 @TypeConverters({Converters.class})
-public abstract class LocalDatabase extends RoomDatabase { // TODO Change to more app-specific name.
+public abstract class TetrisDatabase extends RoomDatabase {
 
   /**  Name of SQLite database file. */
-  public static final String NAME = "starter"; // TODO Change to more app-specific value.
+  public static final String NAME = "tetris_scores";
 
-  LocalDatabase() {
+  TetrisDatabase() {
     // Package-private constructor to avoid automatic HTML generation for Javadocs.
   }
 
@@ -51,7 +53,7 @@ public abstract class LocalDatabase extends RoomDatabase { // TODO Change to mor
    */
   public abstract UserDao getUserDao();
 
-  // TODO Declare abstract accessors (aka getters) for other DAOs used in this project.
+  public abstract ScoreDao getScoreDao();
 
   /**
    * Defines converters for otherwise unsupported types (initially, just {@link Instant}) to one of

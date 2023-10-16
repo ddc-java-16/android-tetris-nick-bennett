@@ -58,6 +58,16 @@ public class PreferencesRepository {
     return preferences;
   }
 
+  /**
+   * Utility method to allow pass-through read access to the underlying {@link SharedPreferences},
+   * by key. The compiler will infer the type parameter {@code T} by examining the
+   * {@code defaultValue} and the reference type of the assignment target (if any); if the inferred
+   * type is not one supported as a Shared
+   * @param key
+   * @param defaultValue
+   * @return
+   * @param <T>
+   */
   public <T> T get(String key, T defaultValue) {
     //noinspection unchecked
     T result = (T) prefs.getAll().get(key);
