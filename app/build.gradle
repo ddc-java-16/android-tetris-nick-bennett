@@ -169,7 +169,7 @@ clean {
 }
 
 roomDdl {
-    source = "$projectDir/schemas/edu.cnm.deepdive.appstarter.service.LocalDatabase/1.json"
+    source = "$projectDir/schemas/edu.cnm.deepdive.tetris.service.TetrisDatabase/1.json"
     destination = "$projectDir/../docs/sql/ddl.sql"
 }
 
