@@ -16,8 +16,8 @@
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-<!--  DO NOT add an app_name property when using this starter template; it is created automatically.-->
-<!--  <string name="app_name">App Starter</string>-->
+  <!--  DO NOT add an app_name property when using this starter template; it is created automatically.-->
+  <!--  <string name="app_name">App Starter</string>-->
 
   <string name="login_failure_message">Unable to sign in with provided credentials.</string>
   <string name="sign_out">Sign out</string>
@@ -39,5 +39,12 @@
   <string name="selectable_text_pref_summary_off">Uneditable text is not selectable.</string>
   <string name="playing_field_width_key">playing_field_width</string>
   <string name="playing_field_width_title">Playing field width</string>
+
+  <string name="game_dummy_text">Game fragment</string>
+  <string name="scores_dummy_text">Scores fragment</string>
+  <string name="game_fragment_label">Tetris</string>
+  <string name="scores_fragment_label">High Scores</string>
+  <string name="scores_label">Scores</string>
+  <string name="game_label">Game</string>
 
 </resources>

@@ -22,7 +22,10 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import dagger.hilt.android.AndroidEntryPoint;
 import edu.cnm.deepdive.tetris.R;
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    setupNavigation();
     setupViewModels();
   }
 
@@ -81,6 +85,12 @@ public class MainActivity extends AppCompatActivity implements
   }
 
   @Override
+  public boolean onSupportNavigateUp() {
+    getOnBackPressedDispatcher().onBackPressed();
+    return true;
+  }
+
+  @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
       @NonNull int[] grantResults) {
     if (!permissionsViewModel.handlePermissionsRequestResult(requestCode, permissions,
@@ -92,6 +102,15 @@ public class MainActivity extends AppCompatActivity implements
   @Override
   public void onAcknowledge(String[] permissions) {
     permissionsViewModel.requestPermissions(this, permissions);
+  }
+
+  private void setupNavigation() {
+    AppBarConfiguration config = new AppBarConfiguration.Builder(
+        R.id.game_fragment, R.id.scores_fragment
+    ).build();
+    NavController navController = ((NavHostFragment)
+        getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)).getNavController();
+    NavigationUI.setupActionBarWithNavController(this, navController, config);
   }
 
   private void setupViewModels() {

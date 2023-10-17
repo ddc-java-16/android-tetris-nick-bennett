@@ -24,4 +24,14 @@
   <color name="cancel">#FFFF0000</color>
   <color name="disabled">#60000000</color>
 
+  <color name="i_shape">#00FFFF</color>
+  <color name="j_shape">#6495ED</color>
+  <color name="l_shape">#FFA500</color>
+  <color name="o_shape">#FFFF00</color>
+  <color name="s_shape">#00FF00</color>
+  <color name="t_shape">#9400D3</color>
+  <color name="z_shape">#FF0000</color>
+  <color name="brick_outline">#000000</color>
+  <color name="null_shape">#00000000</color>
+
 </resources>

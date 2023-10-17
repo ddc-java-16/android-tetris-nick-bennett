@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item
+    android:drawable="@drawable/i_brick"
+    android:maxLevel="0"/>
+
+  <item
+    android:drawable="@drawable/j_brick"
+    android:maxLevel="0"/>
+
+  <item
+    android:drawable="@drawable/l_brick"
+    android:maxLevel="0"/>
+
+  <item
+    android:drawable="@drawable/o_brick"
+    android:maxLevel="0"/>
+
+  <item
+    android:drawable="@drawable/s_brick"
+    android:maxLevel="0"/>
+
+  <item
+    android:drawable="@drawable/t_brick"
+    android:maxLevel="0"/>
+
+  <item
+    android:drawable="@drawable/z_brick"
+    android:maxLevel="0"/>
+
+  <item
+    android:drawable="@drawable/null_brick"
+    android:maxLevel="10000"/>
+
+</level-list>
