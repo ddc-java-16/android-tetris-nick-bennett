@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -44,8 +45,17 @@ public class PlayingFieldView extends GridView {
 
   public void setPlayingField(Field playingField) {
     this.playingField = playingField;
+    int heightInBricks = playingField.getHeight() - playingField.getBufferHeight();
+    int widthInBricks = playingField.getWidth();
+    int maxBrickHeight = getHeight() / heightInBricks;
+    int maxBrickWidth = getWidth() / widthInBricks;
+    ViewGroup.LayoutParams params = getLayoutParams();
+    int columnSize = Math.min(maxBrickHeight, maxBrickWidth);
+    params.height = columnSize * heightInBricks;
+    params.width = columnSize * widthInBricks;
+    setLayoutParams(params);
+    setNumColumns(widthInBricks);
     setAdapter(new Adapter(getContext()));
-    setNumColumns(playingField.getWidth());
   }
 
   private class Adapter extends ArrayAdapter<ShapeType> {
