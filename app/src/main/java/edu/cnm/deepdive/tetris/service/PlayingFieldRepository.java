@@ -34,11 +34,48 @@ public class PlayingFieldRepository {
     return Single.fromSupplier(() -> new Dealer(queueSize, rng))
         .flatMap((dealer) ->
             Single.fromSupplier(() -> new Field(height, width, bufferSize, dealer))
-                .doAfterSuccess((ignored) -> this.dealer.postValue(dealer))
+                .doAfterSuccess((field) -> {
+                  field.start();
+                  this.dealer.postValue(dealer);
+                })
         )
         .doAfterSuccess(playingField::postValue)
         .ignoreElement()
         .subscribeOn(scheduler);
+  }
+
+  public Single<Boolean> moveLeft() {
+    //noinspection DataFlowIssue
+    return Single.fromSupplier(() -> playingField.getValue().moveLeft())
+        .subscribeOn(scheduler);
+  }
+
+  public Single<Boolean> moveRight() {
+    //noinspection DataFlowIssue
+    return Single.fromSupplier(() -> playingField.getValue().moveRight())
+        .subscribeOn(scheduler);
+  }
+
+  public Single<Boolean> rotateLeft() {
+    //noinspection DataFlowIssue
+    return Single.fromSupplier(() -> playingField.getValue().rotateLeft())
+        .subscribeOn(scheduler);
+  }
+
+  public Single<Boolean> rotateRight() {
+    //noinspection DataFlowIssue
+    return Single.fromSupplier(() -> playingField.getValue().rotateRight())
+        .subscribeOn(scheduler);
+  }
+
+  public Single<Boolean> moveDown() {
+    //noinspection DataFlowIssue
+    return Single.fromSupplier(() -> playingField.getValue().moveDown())
+        .subscribeOn(scheduler);
+  }
+
+  public Single<Boolean> drop() {
+
   }
 
   public LiveData<Field> getPlayingField() {

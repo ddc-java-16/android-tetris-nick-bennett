@@ -12,19 +12,74 @@
     android:id="@+id/playing_field"
     android:layout_width="0dp"
     android:layout_height="0dp"
+    android:layout_marginVertical="@dimen/half_dynamic_spacing"
     android:stretchMode="columnWidth"
-    app:layout_constraintBottom_toTopOf="@id/go_to_scores"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintWidth_percent="0.75"
+    app:layout_constraintHorizontal_bias="0"
+    app:layout_constraintBottom_toTopOf="@id/drop"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 
-  <Button
-    android:id="@+id/go_to_scores"
+  <ImageButton
+    android:id="@+id/move_left"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/scores_label"
     android:layout_margin="@dimen/half_dynamic_spacing"
+    android:src="@drawable/move_left"
+    android:tooltipText="@string/move_left"
+    app:layout_constraintHorizontal_chainStyle="spread_inside"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"/>
+    app:layout_constraintLeft_toLeftOf="@id/playing_field"
+    app:layout_constraintRight_toLeftOf="@id/rotate_left"
+    tools:ignore="ContentDescription"/>
+
+  <ImageButton
+    android:id="@+id/rotate_left"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_dynamic_spacing"
+    android:src="@drawable/rotate_left"
+    android:tooltipText="@string/rotate_left"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toRightOf="@id/move_left"
+    app:layout_constraintRight_toLeftOf="@id/drop"
+    tools:ignore="ContentDescription"/>
+
+  <ImageButton
+    android:id="@+id/drop"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_dynamic_spacing"
+    android:src="@drawable/drop"
+    android:tooltipText="@string/drop"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toRightOf="@id/rotate_left"
+    app:layout_constraintRight_toLeftOf="@id/rotate_right"
+    tools:ignore="ContentDescription"/>
+
+  <ImageButton
+    android:id="@+id/rotate_right"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_dynamic_spacing"
+    android:src="@drawable/rotate_right"
+    android:tooltipText="@string/rotate_right"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toRightOf="@id/drop"
+    app:layout_constraintRight_toLeftOf="@id/move_right"
+    tools:ignore="ContentDescription"/>
+
+  <ImageButton
+    android:id="@+id/move_right"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_dynamic_spacing"
+    android:src="@drawable/move_right"
+    android:tooltipText="@string/move_right"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toRightOf="@id/rotate_right"
+    app:layout_constraintRight_toRightOf="@id/playing_field"
+    tools:ignore="ContentDescription"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

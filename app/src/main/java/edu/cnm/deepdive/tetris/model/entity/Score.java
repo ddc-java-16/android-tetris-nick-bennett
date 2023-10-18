@@ -31,6 +31,7 @@ public class Score {
 
   private long duration;
 
+  @ColumnInfo(index = true)
   private long value;
 
   @ColumnInfo(name = "rows_removed")

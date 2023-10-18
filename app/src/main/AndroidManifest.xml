@@ -46,7 +46,9 @@
 
     <activity
       android:name="edu.cnm.deepdive.tetris.controller.MainActivity"
-      android:launchMode="singleTop"/>
+      android:launchMode="singleTop"
+      android:screenOrientation="portrait"
+      tools:ignore="LockedOrientationActivity"/>
 
     <activity
       android:name="edu.cnm.deepdive.tetris.controller.SettingsActivity"

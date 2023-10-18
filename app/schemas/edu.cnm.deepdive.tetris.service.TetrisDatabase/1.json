@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "fbc8a9ad18840e2e83932ef0e075d564",
+    "identityHash": "ab5b72855111dcd79bb4affce220b011",
     "entities": [
       {
         "tableName": "user",
@@ -116,6 +116,15 @@
         },
         "indices": [
           {
+            "name": "index_score_value",
+            "unique": false,
+            "columnNames": [
+              "value"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_score_value` ON `${TABLE_NAME}` (`value`)"
+          },
+          {
             "name": "index_score_player_id",
             "unique": false,
             "columnNames": [
@@ -140,10 +149,15 @@
         ]
       }
     ],
-    "views": [],
+    "views": [
+      {
+        "viewName": "user_score",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT s.player_id,\n       u.display_name,\n       s.value,\n       s.rows_removed,\n       s.created\nFROM user AS u\n         JOIN score AS s ON u.user_id = s.player_id"
+      }
+    ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fbc8a9ad18840e2e83932ef0e075d564')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ab5b72855111dcd79bb4affce220b011')"
     ]
   }
 }

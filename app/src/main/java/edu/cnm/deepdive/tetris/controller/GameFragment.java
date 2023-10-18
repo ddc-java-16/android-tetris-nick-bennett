@@ -29,8 +29,6 @@ public class GameFragment extends Fragment {
   public View onCreateView(
       LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
     binding = FragmentGameBinding.inflate(inflater, container, false);
-    binding.goToScores.setOnClickListener((v) -> Navigation.findNavController(binding.getRoot())
-        .navigate(GameFragmentDirections.navigateToScores(new Random().nextLong())));
     // TODO: 10/17/23 Initialize any fields.
     return binding.getRoot();
   }

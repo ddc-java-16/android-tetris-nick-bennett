@@ -46,5 +46,10 @@
   <string name="scores_fragment_label">High Scores</string>
   <string name="scores_label">Scores</string>
   <string name="game_label">Game</string>
+  <string name="move_left">Move left</string>
+  <string name="move_right">Move right</string>
+  <string name="rotate_left">Rotate left</string>
+  <string name="drop">Drop</string>
+  <string name="rotate_right">Rotate right</string>
 
 </resources>

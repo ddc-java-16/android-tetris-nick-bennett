@@ -26,6 +26,7 @@ import edu.cnm.deepdive.tetris.model.dao.ScoreDao;
 import edu.cnm.deepdive.tetris.model.dao.UserDao;
 import edu.cnm.deepdive.tetris.model.entity.Score;
 import edu.cnm.deepdive.tetris.model.entity.User;
+import edu.cnm.deepdive.tetris.model.pojo.UserScore;
 import edu.cnm.deepdive.tetris.service.TetrisDatabase.Converters;
 import java.time.Instant;
 
@@ -35,6 +36,7 @@ import java.time.Instant;
  */
 @Database(
     entities = {User.class, Score.class},
+    views = {UserScore.class},
     version = 1
 )
 @TypeConverters({Converters.class})
