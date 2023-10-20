@@ -30,8 +30,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import dagger.hilt.android.AndroidEntryPoint;
 import edu.cnm.deepdive.tetris.R;
 import edu.cnm.deepdive.tetris.viewmodel.LoginViewModel;
-import edu.cnm.deepdive.tetris.viewmodel.PermissionsViewModel;
 import edu.cnm.deepdive.tetris.viewmodel.PreferencesViewModel;
+import edu.cnm.deepdive.tetris.viewmodel.UserViewModel;
 
 /**
  * Serves as a basic container activity&mdash;that is, it presents no UI elements of its own (apart
@@ -48,11 +48,10 @@ import edu.cnm.deepdive.tetris.viewmodel.PreferencesViewModel;
  * <li><p>key events in the permissions request flow.</p></li></ul>
  */
 @AndroidEntryPoint
-public class MainActivity extends AppCompatActivity implements
-    PermissionsExplanationFragment.OnAcknowledgeListener {
+public class MainActivity extends AppCompatActivity {
 
   private LoginViewModel loginViewModel;
-  private PermissionsViewModel permissionsViewModel;
+  private UserViewModel userViewModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -90,39 +89,23 @@ public class MainActivity extends AppCompatActivity implements
     return true;
   }
 
-  @Override
-  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-      @NonNull int[] grantResults) {
-    if (!permissionsViewModel.handlePermissionsRequestResult(requestCode, permissions,
-        grantResults)) {
-      super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-  }
-
-  @Override
-  public void onAcknowledge(String[] permissions) {
-    permissionsViewModel.requestPermissions(this, permissions);
-  }
-
   private void setupNavigation() {
     AppBarConfiguration config = new AppBarConfiguration.Builder(
         R.id.game_fragment, R.id.scores_fragment
     ).build();
+    //noinspection DataFlowIssue
     NavController navController = ((NavHostFragment)
         getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)).getNavController();
     NavigationUI.setupActionBarWithNavController(this, navController, config);
   }
 
   private void setupViewModels() {
-    loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+    ViewModelProvider provider = new ViewModelProvider(this);
+    loginViewModel = provider.get(LoginViewModel.class);
     loginViewModel
         .getAccount()
         .observe(this, this::handleAccount);
-    permissionsViewModel = new ViewModelProvider(this).get(PermissionsViewModel.class);
-    NavHostFragment navHostFragment =
-        (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-    //noinspection DataFlowIssue
-    permissionsViewModel.startPermissionsCheck(this, navHostFragment.getNavController());
+    provider.get(UserViewModel.class); // HACK This is just to make sure that the current user gets written to the DB.
   }
 
   private void handleAccount(GoogleSignInAccount account) {

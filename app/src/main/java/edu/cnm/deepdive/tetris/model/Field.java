@@ -4,6 +4,10 @@ import edu.cnm.deepdive.tetris.model.Block.ShapeType;
 
 public class Field {
 
+  private static final double TIMING_OFFSET = 0.8;
+  private static final double TIMING_LEVEL_MULTIPLIER = 0.007;
+  private static final int[] removalScores = {0, 1, 3, 5, 8};
+
   private final int height;
   private final int width;
   private final int bufferHeight;
@@ -13,6 +17,10 @@ public class Field {
   private Block currentBlock;
   private Block ghostBlock;
   private int rowsRemoved;
+  private int levelRowsRemoved;
+  private int level;
+  private int score;
+  private double secondsPerTick;
   private boolean gameOver;
 
   public Field(int height, int width, int bufferHeight, Dealer dealer) {
@@ -23,17 +31,17 @@ public class Field {
     contents = new ShapeType[height][width];
   }
 
-  public void start() throws GameOverException {
-    if (gameOver) {
-      throw new GameOverException();
+  public void start() {
+    if (level > 0) {
+      // TODO: 10/20/23 Define a GameStartedException class (below); throw an instance of that class here.
     }
+    level = 1;
+    computeTiming();
     addBlock();
   }
 
   public boolean rotateLeft() throws GameOverException {
-    if (gameOver) {
-      throw new GameOverException();
-    }
+    checkForGameOver();
     boolean rotated = currentBlock.rotate(false);
     if (rotated) {
       createGhost();
@@ -41,10 +49,14 @@ public class Field {
     return rotated;
   }
 
-  public boolean rotateRight() throws GameOverException {
+  private void checkForGameOver() throws GameOverException{
     if (gameOver) {
       throw new GameOverException();
     }
+  }
+
+  public boolean rotateRight() throws GameOverException {
+    checkForGameOver();
     boolean rotated = currentBlock.rotate(true);
     if (rotated) {
       createGhost();
@@ -53,9 +65,7 @@ public class Field {
   }
 
   public boolean moveLeft() throws GameOverException {
-    if (gameOver) {
-      throw new GameOverException();
-    }
+    checkForGameOver();
     boolean moved = currentBlock.move(0, -1);
     if (moved) {
       createGhost();
@@ -64,9 +74,7 @@ public class Field {
   }
 
   public boolean moveRight() throws GameOverException {
-    if (gameOver) {
-      throw new GameOverException();
-    }
+    checkForGameOver();
     boolean moved = currentBlock.move(0, 1);
     if (moved) {
       createGhost();
@@ -75,9 +83,7 @@ public class Field {
   }
 
   public boolean moveDown() throws GameOverException {
-    if (gameOver) {
-      throw new GameOverException();
-    }
+    checkForGameOver();
     boolean moved = currentBlock.move(1, 0);
     if (!moved) {
       currentBlock.freeze();
@@ -146,16 +152,50 @@ public class Field {
     return rowsRemoved;
   }
 
+  public int getLevelRowsRemoved() {
+    return levelRowsRemoved;
+  }
+
+  public int getLevel() {
+    return level;
+  }
+
+  public int getScore() {
+    return score;
+  }
+
+  public double getSecondsPerTick() {
+    return secondsPerTick;
+  }
+
   public boolean isGameOver() {
     return gameOver;
   }
 
   private void update(int rowIndex) {
     for (; rowIndex >= 0 && !isEmpty(rowIndex); rowIndex--) {
-      while (isFull(rowIndex)) {
-        removeRow(rowIndex);
-        rowsRemoved++;
-      }
+      int rowsRemoved = removeRows(rowIndex);
+      this.rowsRemoved += rowsRemoved;
+      updateLevel(rowsRemoved);
+      score += removalScores[rowsRemoved];
+    }
+  }
+
+  private int removeRows(int rowIndex) {
+    int rowsRemoved = 0;
+    while (isFull(rowIndex)) {
+      removeRow(rowIndex);
+      rowsRemoved++;
+    }
+    return rowsRemoved;
+  }
+
+  private void updateLevel(int rowsRemoved) {
+    levelRowsRemoved += rowsRemoved;
+    if (levelRowsRemoved >= 5 * level) {
+      level++;
+      computeTiming();
+      levelRowsRemoved = 0;
     }
   }
 
@@ -194,6 +234,10 @@ public class Field {
       }
     }
     return empty;
+  }
+
+  private void computeTiming() {
+    secondsPerTick = Math.pow(TIMING_OFFSET - (level - 1) * TIMING_LEVEL_MULTIPLIER, level - 1);
   }
 
   public static class GameOverException extends IllegalStateException {

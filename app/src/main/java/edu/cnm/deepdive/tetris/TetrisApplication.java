@@ -16,7 +16,6 @@
 package edu.cnm.deepdive.tetris;
 
 import android.app.Application;
-import com.facebook.stetho.Stetho;
 import dagger.hilt.android.HiltAndroidApp;
 
 /**
@@ -30,7 +29,8 @@ public class TetrisApplication extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
-    Stetho.initializeWithDefaults(this);
+    // TODO Add any additional initialization, as required. For example, if not using Hilt, this is
+    //  a good place to invoke static setters in classes designed for singleton instantiation.
   }
 
 }

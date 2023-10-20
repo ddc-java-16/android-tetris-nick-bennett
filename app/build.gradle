@@ -131,9 +131,6 @@ dependencies {
     // OkHttp logging dependency
     implementation(libs.logging.interceptor)
 
-    // Stetho (inspection) dependency
-    implementation(libs.stetho)
-
     // Libraries for JVM-based testing.
     testImplementation(libs.junit.api)
     testImplementation(libs.junit.params)

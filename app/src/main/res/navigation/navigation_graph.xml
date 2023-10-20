@@ -21,19 +21,6 @@
   android:id="@+id/navigation_graph"
   app:startDestination="@id/game_fragment">
 
-  <action
-    android:id="@+id/explain_permissions"
-    app:destination="@id/navigation_permissions_explanation">
-
-    <argument
-      android:name="permissions_to_explain"
-      app:argType="string[]"/>
-    <argument
-      android:name="permissions_to_request"
-      app:argType="string[]"/>
-
-  </action>
-
   <fragment
     android:id="@+id/game_fragment"
     android:name="edu.cnm.deepdive.tetris.controller.GameFragment"
@@ -67,19 +54,5 @@
       app:destination="@id/game_fragment"/>
 
   </fragment>
-
-  <dialog
-    android:id="@+id/navigation_permissions_explanation"
-    android:name="edu.cnm.deepdive.tetris.controller.PermissionsExplanationFragment">
-
-    <argument
-      android:name="permissions_to_explain"
-      app:argType="string[]"/>
-
-    <argument
-      android:name="permissions_to_request"
-      app:argType="string[]"/>
-
-  </dialog>
 
 </navigation>

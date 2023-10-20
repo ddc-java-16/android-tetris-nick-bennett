@@ -23,11 +23,12 @@ play-services-auth = "20.7.0"
 
 # Third-party plugin and library versions
 retrofit = "2.9.0"
-rx-java = "3.1.6"
+rx-java = "3.1.8"
 rx-android = "3.0.2"
 logging-interceptor = "4.11.0"
 picasso = "2.8"
-stetho = "1.6.0"
+flipper="0.227.0"
+soloader="0.10.5"
 schema-parser = "1.0.0"
 
 # Test library versions
@@ -93,15 +94,17 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.r
 # OkHttp logging dependency
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
 
-# Stetho (inspection) dependency
-stetho = { group = "com.facebook.stetho", name = "stetho", version.ref = "stetho" }
+# Flipper (inspection) libraries
+flipper = { module = "com.facebook.flipper:flipper", version.ref = "flipper" }
+flipper-noop = { module = "com.facebook.flipper:flipper-noop", version.ref = "flipper" }
+soloader = { module = "com.facebook.soloader:soloader", version.ref = "soloader" }
 
-# Libraries for JVM-based testing.
+# Libraries for JVM-based testing
 junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
 junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
 
-# Libraries for instrumented (run in Android) testing.
+# Libraries for instrumented (run in Android) testing
 test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }
 junit-android-core = { group = "de.mannodermaus.junit5", name = "android-test-core", version.ref = "junit-android" }
 junit-android-runner = { group = "de.mannodermaus.junit5", name = "android-test-runner", version.ref = "junit-android" }
