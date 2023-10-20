@@ -16,7 +16,7 @@ public class ScoreRepository {
   private final ScoreDao dao;
 
   @Inject
-  public ScoreRepository(ScoreDao dao) {
+  ScoreRepository(ScoreDao dao) {
     this.dao = dao;
   }
 

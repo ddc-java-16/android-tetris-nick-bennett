@@ -51,7 +51,6 @@ import edu.cnm.deepdive.tetris.viewmodel.UserViewModel;
 public class MainActivity extends AppCompatActivity {
 
   private LoginViewModel loginViewModel;
-  private UserViewModel userViewModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
