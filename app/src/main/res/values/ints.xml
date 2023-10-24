@@ -3,4 +3,6 @@
   <integer name="playing_field_width_min">8</integer>
   <integer name="playing_field_width_max">20</integer>
   <integer name="playing_field_width_default">12</integer>
+  <integer name="current_block_opacity">255</integer>
+  <integer name="ghost_block_opacity">24</integer>
 </resources>

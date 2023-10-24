@@ -12,6 +12,8 @@ import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.Supplier;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.subjects.Subject;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
@@ -20,31 +22,58 @@ import javax.inject.Singleton;
 @Singleton
 public class PlayingFieldRepository {
 
+  private static final int MILLISECONDS_PER_SECOND = 1000;
+  private static final int DROP_ROWS_PER_TICK = 20;
+
   private final Random rng;
   private final MutableLiveData<Field> playingField;
   private final MutableLiveData<Dealer> dealer;
-  private final Scheduler scheduler;
+  private final Scheduler moveScheduler;
+  private final Scheduler tickScheduler;
+  private final Scheduler dropScheduler;
+
+  private Subject<Boolean> ticker;
 
   @Inject
   PlayingFieldRepository(@ApplicationContext Context context, Random rng) {
     this.rng = rng;
     playingField = new MutableLiveData<>();
     dealer = new MutableLiveData<>();
-    scheduler = Schedulers.single();
+    moveScheduler = Schedulers.single();
+    tickScheduler = Schedulers.single();
+    dropScheduler = Schedulers.single();
   }
 
   public Completable create(int height, int width, int bufferSize, int queueSize) {
     return Single.fromSupplier(() -> new Dealer(queueSize, rng))
         .flatMap((dealer) ->
             Single.fromSupplier(() -> new Field(height, width, bufferSize, dealer))
-                .doAfterSuccess((field) -> {
-                  field.start();
-                  this.dealer.postValue(dealer);
-                })
+                .doAfterSuccess((field) -> this.dealer.postValue(dealer))
         )
         .doAfterSuccess(playingField::postValue)
         .ignoreElement()
-        .subscribeOn(scheduler);
+        .subscribeOn(moveScheduler);
+  }
+
+  public Observable<Boolean> run() {
+    clearTicker();
+    Field field = playingField.getValue();
+    //noinspection DataFlowIssue
+    if (!field.isGameStarted()) {
+      field.start();
+    }
+    ticker = BehaviorSubject.createDefault(Boolean.TRUE);
+    return ticker
+        .filter(Boolean.TRUE::equals)
+        .concatMap((success) -> Observable.just(success)
+            .delay(Math.round(field.getSecondsPerTick() * MILLISECONDS_PER_SECOND),
+                TimeUnit.MILLISECONDS, tickScheduler))
+        .observeOn(moveScheduler)
+        .map((ignored) -> tick());
+  }
+
+  public void stop() {
+    clearTicker();
   }
 
   public Single<Boolean> moveLeft() {
@@ -72,20 +101,17 @@ public class PlayingFieldRepository {
     return move(() -> playingField.getValue().moveDown());
   }
 
-  public Completable drop(long interval) {
+  public Completable drop() {
     Field field = playingField.getValue();
+    //noinspection DataFlowIssue
     return Completable.fromObservable(
-            Observable.interval(0, interval, TimeUnit.MILLISECONDS)
-                .takeWhile((ignored) -> {
-                  //noinspection DataFlowIssue
-                  boolean moved = field.moveDown();
-                  if (moved) {
-                    playingField.postValue(field);
-                  }
-                  return moved;
-                })
-        )
-        .subscribeOn(scheduler);
+        Observable.interval(0, Math.round(
+                    field.getSecondsPerTick() * MILLISECONDS_PER_SECOND / DROP_ROWS_PER_TICK),
+                TimeUnit.MILLISECONDS, dropScheduler)
+            .observeOn(moveScheduler)
+            .takeWhile((ignored) -> field.moveDown())
+            .doAfterNext((ignored) -> playingField.postValue(field))
+    );
   }
 
   public LiveData<Field> getPlayingField() {
@@ -104,7 +130,32 @@ public class PlayingFieldRepository {
             playingField.postValue(field);
           }
         })
-        .subscribeOn(scheduler);
+        .subscribeOn(moveScheduler);
   }
-  
+
+  private boolean tick() {
+    Field field = playingField.getValue();
+    //noinspection DataFlowIssue
+    boolean moved = field.moveDown();
+    if (!moved) {
+      dealer.postValue(dealer.getValue());
+    }
+    playingField.postValue(field);
+    boolean stillRunning = moved || !field.isGameOver();
+    if (stillRunning) {
+      ticker.onNext(Boolean.TRUE);
+    } else {
+      clearTicker();
+    }
+    return stillRunning;
+  }
+
+  private void clearTicker() {
+    if (ticker != null && !ticker.hasComplete()) {
+      ticker.onComplete();
+    }
+    ticker = null;
+  }
+
+
 }

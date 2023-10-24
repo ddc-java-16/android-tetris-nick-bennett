@@ -1,14 +1,13 @@
 package edu.cnm.deepdive.tetris.viewmodel;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.util.Log;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.preference.PreferenceManager;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import edu.cnm.deepdive.tetris.R;
@@ -16,10 +15,10 @@ import edu.cnm.deepdive.tetris.model.Dealer;
 import edu.cnm.deepdive.tetris.model.Field;
 import edu.cnm.deepdive.tetris.service.PlayingFieldRepository;
 import edu.cnm.deepdive.tetris.service.PreferencesRepository;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,32 +66,36 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
 
   public void create() {
     int width = preferencesRepository.get(playingFieldWidthKey, playingFieldWidthDefault);
-    Disposable disposable = playingFieldRepository.create(25, width, 5, 5) // FIXME: 10/9/23 Replace with values from preferences.
-        .subscribe(
-            () -> {},
-            throwable::postValue
-        );
-    pending.add(disposable);
+    execute(playingFieldRepository.create(25, width, 5, 5)); // FIXME: 10/9/23 Replace with values from preferences.
+  }
+
+  public void run() {
+    execute(playingFieldRepository.run());
+  }
+
+  public void stop() {
+    playingFieldRepository.stop();
+    // TODO: 10/23/23 Set whatever is needed to trigger an update in the UI.
   }
 
   public void moveLeft() {
-    move(playingFieldRepository.moveLeft());
+    execute(playingFieldRepository.moveLeft());
   }
 
   public void moveRight() {
-    move(playingFieldRepository.moveRight());
+    execute(playingFieldRepository.moveRight());
   }
 
   public void rotateLeft() {
-    move(playingFieldRepository.rotateLeft());
+    execute(playingFieldRepository.rotateLeft());
   }
 
   public void rotateRight() {
-    move(playingFieldRepository.rotateRight());
+    execute(playingFieldRepository.rotateRight());
   }
 
   public void drop() {
-    // TODO: 10/6/23 Invoke
+    execute(playingFieldRepository.drop());
   }
 
   @Override
@@ -101,11 +104,40 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
     pending.clear();
   }
 
-  private void move(Single<Boolean> task) {
-    Disposable disposable = task.subscribe(
+  private void execute(Single<Boolean> task) {
+    moveSuccess.postValue(null);
+    throwable.postValue(null);
+    task.subscribe(
         moveSuccess::postValue,
-        throwable::postValue
+        this::postThrowable,
+        pending
     );
-    pending.add(disposable);
   }
+
+  private void execute(Completable task) {
+    moveSuccess.postValue(null);
+    throwable.postValue(null);
+    task.subscribe(
+        () -> {},
+        this::postThrowable,
+        pending
+    );
+  }
+
+  private void execute(Observable<Boolean> task) {
+    moveSuccess.postValue(null);
+    throwable.postValue(null);
+    task.subscribe(
+        moveSuccess::postValue,
+        this::postThrowable,
+        () -> {},
+        pending
+    );
+  }
+
+  private void postThrowable(Throwable throwable) {
+    Log.e(getClass().getSimpleName(), throwable.getMessage(), throwable);
+    this.throwable.postValue(throwable);
+  }
+
 }

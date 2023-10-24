@@ -6,6 +6,7 @@ public class Field {
 
   private static final double TIMING_OFFSET = 0.8;
   private static final double TIMING_LEVEL_MULTIPLIER = 0.007;
+  private static final int ROW_THRESHOLD_LEVEL_MULTIPLIER = 5;
   private static final int[] removalScores = {0, 1, 3, 5, 8};
 
   private final int height;
@@ -32,8 +33,8 @@ public class Field {
   }
 
   public void start() {
-    if (level > 0) {
-      // TODO: 10/20/23 Define a GameStartedException class (below); throw an instance of that class here.
+    if (isGameStarted()) {
+      throw new GameStartedException();
     }
     level = 1;
     computeTiming();
@@ -47,12 +48,6 @@ public class Field {
       createGhost();
     }
     return rotated;
-  }
-
-  private void checkForGameOver() throws GameOverException{
-    if (gameOver) {
-      throw new GameOverException();
-    }
   }
 
   public boolean rotateRight() throws GameOverException {
@@ -168,6 +163,10 @@ public class Field {
     return secondsPerTick;
   }
 
+  public boolean isGameStarted() {
+    return level > 0;
+  }
+
   public boolean isGameOver() {
     return gameOver;
   }
@@ -192,7 +191,7 @@ public class Field {
 
   private void updateLevel(int rowsRemoved) {
     levelRowsRemoved += rowsRemoved;
-    if (levelRowsRemoved >= 5 * level) {
+    if (levelRowsRemoved >= ROW_THRESHOLD_LEVEL_MULTIPLIER * level) {
       level++;
       computeTiming();
       levelRowsRemoved = 0;
@@ -240,10 +239,40 @@ public class Field {
     secondsPerTick = Math.pow(TIMING_OFFSET - (level - 1) * TIMING_LEVEL_MULTIPLIER, level - 1);
   }
 
+  private void checkForGameOver() throws GameOverException{
+    if (gameOver) {
+      throw new GameOverException();
+    }
+  }
+
+  public static class GameStartedException extends IllegalStateException {
+
+    private static final String DEFAULT_MESSAGE = "Game can only be started once.";
+
+    public GameStartedException() {
+      this(DEFAULT_MESSAGE);
+    }
+
+    public GameStartedException(String s) {
+      super(s);
+    }
+
+    public GameStartedException(String message, Throwable cause) {
+      super(message, cause);
+    }
+
+    public GameStartedException(Throwable cause) {
+      super(cause);
+    }
+
+  }
+
   public static class GameOverException extends IllegalStateException {
 
+    private static final String DEFAULT_MESSAGE = "No movement allowed after game is over";
+
     public GameOverException() {
-      super("No movement allowed after game is over");
+      this(DEFAULT_MESSAGE);
     }
 
     public GameOverException(String message) {

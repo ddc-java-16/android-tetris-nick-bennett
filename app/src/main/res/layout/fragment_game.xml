@@ -15,18 +15,48 @@
     android:layout_height="wrap_content"
     app:layout_constraintGuide_percent="0.75"/>
 
+  <TextView
+    android:id="@+id/level"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintVertical_chainStyle="packed"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/playing_field"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toLeftOf="@id/rows_removed"
+    tools:text="5"/>
+
+  <TextView
+    android:id="@+id/rows_removed"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="@id/level"
+    app:layout_constraintBottom_toBottomOf="@id/level"
+    app:layout_constraintLeft_toRightOf="@id/level"
+    app:layout_constraintRight_toLeftOf="@id/score"
+    tools:text="30"/>
+
+  <TextView
+    android:id="@+id/score"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="@id/level"
+    app:layout_constraintBottom_toBottomOf="@id/level"
+    app:layout_constraintLeft_toRightOf="@id/rows_removed"
+    app:layout_constraintRight_toLeftOf="@id/vertical_guideline"
+    tools:text="100000"/>
+
   <edu.cnm.deepdive.tetris.view.PlayingFieldView
     android:id="@+id/playing_field"
     android:layout_width="0dp"
     android:layout_height="0dp"
     android:layout_margin="@dimen/half_dynamic_spacing"
     android:stretchMode="columnWidth"
-    app:layout_constraintVertical_chainStyle="packed"
     app:layout_constraintWidth_percent="0.75"
     app:layout_constraintBottom_toTopOf="@id/drop"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toLeftOf="@id/vertical_guideline"
-    app:layout_constraintTop_toTopOf="parent"/>
+    app:layout_constraintTop_toBottomOf="@id/level"/>
 
   <ImageButton
     android:id="@+id/move_left"
@@ -93,5 +123,26 @@
     app:layout_constraintLeft_toRightOf="@id/rotate_right"
     app:layout_constraintRight_toLeftOf="@id/vertical_guideline"
     tools:ignore="ContentDescription"/>
+
+  <Button
+    android:id="@+id/run"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_dynamic_spacing"
+    android:text="Run"
+    app:layout_constraintLeft_toLeftOf="@id/vertical_guideline"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/stop"/>
+
+  <Button
+    android:id="@+id/stop"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_dynamic_spacing"
+    android:text="Stop"
+    app:layout_constraintLeft_toLeftOf="@id/vertical_guideline"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

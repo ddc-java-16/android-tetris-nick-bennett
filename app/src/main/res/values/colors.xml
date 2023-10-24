@@ -33,5 +33,6 @@
   <color name="z_shape">#FF0000</color>
   <color name="brick_outline">#000000</color>
   <color name="null_shape">#00000000</color>
+  <color name="null_outline">#40000000</color>
 
 </resources>

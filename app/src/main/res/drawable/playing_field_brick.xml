@@ -7,27 +7,27 @@
 
   <item
     android:drawable="@drawable/j_brick"
-    android:maxLevel="0"/>
+    android:maxLevel="1"/>
 
   <item
     android:drawable="@drawable/l_brick"
-    android:maxLevel="0"/>
+    android:maxLevel="2"/>
 
   <item
     android:drawable="@drawable/o_brick"
-    android:maxLevel="0"/>
+    android:maxLevel="3"/>
 
   <item
     android:drawable="@drawable/s_brick"
-    android:maxLevel="0"/>
+    android:maxLevel="4"/>
 
   <item
     android:drawable="@drawable/t_brick"
-    android:maxLevel="0"/>
+    android:maxLevel="5"/>
 
   <item
     android:drawable="@drawable/z_brick"
-    android:maxLevel="0"/>
+    android:maxLevel="6"/>
 
   <item
     android:drawable="@drawable/null_brick"
