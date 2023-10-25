@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import edu.cnm.deepdive.tetris.R;
+import edu.cnm.deepdive.tetris.adapter.NextQueueAdapter;
 import edu.cnm.deepdive.tetris.databinding.FragmentGameBinding;
 import edu.cnm.deepdive.tetris.viewmodel.PlayingFieldViewModel;
 import java.util.Random;
@@ -54,6 +55,13 @@ public class GameFragment extends Fragment {
           binding.level.setText(String.valueOf(playingField.getLevel()));
           binding.rowsRemoved.setText(String.valueOf(playingField.getRowsRemoved()));
           binding.score.setText(String.valueOf(playingField.getScore()));
+        });
+    viewModel
+        .getDealer()
+        .observe(getViewLifecycleOwner(), (dealer) -> {
+          //noinspection DataFlowIssue
+          NextQueueAdapter adapter = new NextQueueAdapter(getContext(), dealer.getQueue());
+          binding.nextQueue.setAdapter(adapter);
         });
   }
 

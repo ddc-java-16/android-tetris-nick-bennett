@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item
+    android:drawable="@drawable/i_block"
+    android:maxLevel="0"/>
+
+  <item
+    android:drawable="@drawable/j_block"
+    android:maxLevel="1"/>
+
+  <item
+    android:drawable="@drawable/l_block"
+    android:maxLevel="2"/>
+
+  <item
+    android:drawable="@drawable/o_block"
+    android:maxLevel="3"/>
+
+  <item
+    android:drawable="@drawable/s_block"
+    android:maxLevel="4"/>
+
+  <item
+    android:drawable="@drawable/t_block"
+    android:maxLevel="5"/>
+
+  <item
+    android:drawable="@drawable/z_block"
+    android:maxLevel="6"/>
+
+</level-list>

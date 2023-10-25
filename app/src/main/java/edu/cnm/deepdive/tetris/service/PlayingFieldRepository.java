@@ -61,6 +61,8 @@ public class PlayingFieldRepository {
     //noinspection DataFlowIssue
     if (!field.isGameStarted()) {
       field.start();
+      playingField.postValue(field);
+      dealer.postValue(dealer.getValue());
     }
     ticker = BehaviorSubject.createDefault(Boolean.TRUE);
     return ticker
@@ -109,7 +111,14 @@ public class PlayingFieldRepository {
                     field.getSecondsPerTick() * MILLISECONDS_PER_SECOND / DROP_ROWS_PER_TICK),
                 TimeUnit.MILLISECONDS, dropScheduler)
             .observeOn(moveScheduler)
-            .takeWhile((ignored) -> field.moveDown())
+            .takeWhile((ignored) -> {
+              if (field.moveDown()) {
+                return true;
+              } else {
+                dealer.postValue(dealer.getValue());
+                return false;
+              }
+            })
             .doAfterNext((ignored) -> playingField.postValue(field))
     );
   }
