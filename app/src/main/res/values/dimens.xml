@@ -19,4 +19,5 @@
   <dimen name="brick_corner_radius">8dp</dimen>
   <dimen name="image_button_size">36dp</dimen>
   <dimen name="brick_outline_width">1dp</dimen>
+  <dimen name="half_static_spacing">4dp</dimen>
 </resources>

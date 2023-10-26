@@ -15,36 +15,78 @@
     android:layout_height="wrap_content"
     app:layout_constraintGuide_percent="0.75"/>
 
-  <TextView
-    android:id="@+id/level"
-    android:layout_width="wrap_content"
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/level_layout"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_static_spacing"
+    app:hintEnabled="true"
+    app:layout_constraintHorizontal_weight="1"
     app:layout_constraintVertical_chainStyle="packed"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toTopOf="@id/playing_field"
     app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toLeftOf="@id/rows_removed"
-    tools:text="5"/>
+    app:layout_constraintRight_toLeftOf="@id/rows_removed_layout">
 
-  <TextView
-    android:id="@+id/rows_removed"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="@id/level"
-    app:layout_constraintBottom_toBottomOf="@id/level"
-    app:layout_constraintLeft_toRightOf="@id/level"
-    app:layout_constraintRight_toLeftOf="@id/score"
-    tools:text="30"/>
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/level"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/current_level"
+      android:inputType="none"
+      android:editable="false"
+      android:focusable="false"
+      tools:text="5"/>
 
-  <TextView
-    android:id="@+id/score"
-    android:layout_width="wrap_content"
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/rows_removed_layout"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="@id/level"
-    app:layout_constraintBottom_toBottomOf="@id/level"
-    app:layout_constraintLeft_toRightOf="@id/rows_removed"
-    app:layout_constraintRight_toLeftOf="@id/vertical_guideline"
-    tools:text="100000"/>
+    android:layout_margin="@dimen/half_static_spacing"
+    app:layout_constraintHorizontal_weight="1"
+    app:hintEnabled="true"
+    app:layout_constraintTop_toTopOf="@id/level_layout"
+    app:layout_constraintBottom_toBottomOf="@id/level_layout"
+    app:layout_constraintLeft_toRightOf="@id/level_layout"
+    app:layout_constraintRight_toLeftOf="@id/score_layout">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/rows_removed"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/current_rows_removed"
+      android:inputType="none"
+      android:editable="false"
+      android:focusable="false"
+      tools:text="30"/>
+
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/score_layout"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_static_spacing"
+    app:hintEnabled="true"
+    app:layout_constraintHorizontal_weight="1"
+    app:layout_constraintTop_toTopOf="@id/level_layout"
+    app:layout_constraintBottom_toBottomOf="@id/level_layout"
+    app:layout_constraintLeft_toRightOf="@id/rows_removed_layout"
+    app:layout_constraintRight_toLeftOf="@id/vertical_guideline">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/score"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="none"
+      android:hint="@string/score"
+      android:editable="false"
+      android:focusable="false"
+      tools:text="100000"/>
+
+  </com.google.android.material.textfield.TextInputLayout>
 
   <edu.cnm.deepdive.tetris.view.PlayingFieldView
     android:id="@+id/playing_field"
@@ -56,7 +98,49 @@
     app:layout_constraintBottom_toTopOf="@id/drop"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toLeftOf="@id/vertical_guideline"
-    app:layout_constraintTop_toBottomOf="@id/level"/>
+    app:layout_constraintTop_toBottomOf="@id/level_layout"
+    tools:listitem="@layout/item_playing_field"/>
+
+  <LinearLayout
+    android:id="@+id/game_over_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:visibility="gone"
+    android:padding="@dimen/half_dynamic_spacing"
+    android:background="@drawable/null_brick"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent">
+
+    <TextView
+      android:id="@+id/game_over"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/half_static_spacing"
+      android:text="@string/game_over"
+      style="@style/TextAppearance.Material3.HeadlineLarge"/>
+
+    <TextView
+      android:id="@+id/final_score"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/half_static_spacing"
+      android:text="@string/final_score_format"
+      style="@style/TextAppearance.Material3.HeadlineMedium"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/show_scores"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/half_static_spacing"
+      android:src="@drawable/high_scores"
+      android:tooltipText="@string/high_scores"/>
+
+  </LinearLayout>
+
 
   <ImageButton
     android:id="@+id/move_left"
@@ -154,6 +238,5 @@
     app:layout_constraintLeft_toLeftOf="@id/vertical_guideline"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
