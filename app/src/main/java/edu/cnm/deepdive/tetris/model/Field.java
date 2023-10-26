@@ -77,10 +77,10 @@ public class Field {
     return moved;
   }
 
-  public boolean moveDown() throws GameOverException {
+  public boolean moveDown(boolean freezeOnFailure) throws GameOverException {
     checkForGameOver();
     boolean moved = currentBlock.move(1, 0);
-    if (!moved) {
+    if (!moved && freezeOnFailure) {
       currentBlock.freeze();
       update(currentBlock.getTopRow() + currentBlock.getLastOccupiedRow());
       if (currentBlock.getTopRow() + currentBlock.getLastOccupiedRow() < bufferHeight) {

@@ -7,6 +7,7 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import dagger.hilt.android.qualifiers.ApplicationContext;
@@ -28,6 +29,7 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
   private final PlayingFieldRepository playingFieldRepository;
   private final PreferencesRepository preferencesRepository;
   private final MutableLiveData<Boolean> moveSuccess;
+  private final LiveData<Boolean> inProgress;
   private final MutableLiveData<Throwable> throwable;
   private final CompositeDisposable pending;
   private final String playingFieldWidthKey;
@@ -40,6 +42,8 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
     this.playingFieldRepository = playingFieldRepository;
     this.preferencesRepository = preferencesRepository;
     moveSuccess = new MutableLiveData<>();
+    inProgress = Transformations.map(playingFieldRepository.getPlayingField(), 
+        (field) -> !field.isGameOver());
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
     Resources resources = context.getResources();
@@ -60,6 +64,10 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
     return moveSuccess;
   }
 
+  public LiveData<Boolean> getInProgress() {
+    return Transformations.distinctUntilChanged(inProgress);
+  }
+
   public LiveData<Throwable> getThrowable() {
     return throwable;
   }
@@ -75,7 +83,6 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
 
   public void stop() {
     playingFieldRepository.stop();
-    // TODO: 10/23/23 Set whatever is needed to trigger an update in the UI.
   }
 
   public void moveLeft() {
@@ -95,7 +102,7 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
   }
 
   public void drop() {
-    execute(playingFieldRepository.drop());
+    execute(playingFieldRepository.drop(false));
   }
 
   @Override
