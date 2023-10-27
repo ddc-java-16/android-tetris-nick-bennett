@@ -13,7 +13,7 @@
     android:layout_weight="1"
     android:textAlignment="center"
     android:text="@string/ranking_header"
-    style="@style/TextAppearance.Material3.HeadlineSmall"/>
+    style="@style/TextAppearance.Material3.TitleMedium"/>
 
   <TextView
     android:id="@+id/display_name"
@@ -23,7 +23,7 @@
     android:layout_weight="2"
     android:textAlignment="textStart"
     android:text="@string/display_name_header"
-    style="@style/TextAppearance.Material3.HeadlineSmall"/>
+    style="@style/TextAppearance.Material3.TitleMedium"/>
 
   <TextView
     android:id="@+id/score"
@@ -33,7 +33,7 @@
     android:layout_weight="1"
     android:textAlignment="textEnd"
     android:text="@string/score_header"
-    style="@style/TextAppearance.Material3.HeadlineSmall"/>
+    style="@style/TextAppearance.Material3.TitleMedium"/>
 
   <TextView
     android:id="@+id/rows_removed"
@@ -43,7 +43,7 @@
     android:layout_weight="1"
     android:textAlignment="textEnd"
     android:text="@string/rows_removed_header"
-    style="@style/TextAppearance.Material3.HeadlineSmall"/>
+    style="@style/TextAppearance.Material3.TitleMedium"/>
 
   <TextView
     android:id="@+id/created"
@@ -53,6 +53,6 @@
     android:layout_weight="2"
     android:textAlignment="textStart"
     android:text="@string/created_header"
-    style="@style/TextAppearance.Material3.HeadlineSmall"/>
+    style="@style/TextAppearance.Material3.TitleMedium"/>
 
 </LinearLayout>

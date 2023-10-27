@@ -2,6 +2,9 @@ package edu.cnm.deepdive.tetris.controller;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -38,6 +41,8 @@ public class GameFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    //noinspection deprecation
+    setHasOptionsMenu(true); // FIXME: 10/27/23 Replace with new recommended approach.
   }
 
   @Override
@@ -53,6 +58,30 @@ public class GameFragment extends Fragment {
     setupViewModels();
   }
 
+  /** @noinspection deprecation*/ // FIXME: 10/27/23 Replace with new recommended approach.
+  @Override
+  public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    super.onCreateOptionsMenu(menu, inflater);
+    inflater.inflate(R.menu.game_options, menu);
+  }
+
+  /** @noinspection deprecation*/ // FIXME: 10/27/23 Replace with new recommended approach.
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    boolean handled = true;
+    int id = item.getItemId();
+    if (id == R.id.play) {
+      playingFieldViewModel.run();
+    } else if (id == R.id.pause) {
+      playingFieldViewModel.stop();
+    } else if (id == R.id.restart) {
+      playingFieldViewModel.create();
+    } else {
+      handled = super.onOptionsItemSelected(item);
+    }
+    return handled;
+  }
+
   private void setupUI(LayoutInflater inflater, ViewGroup container) {
     binding = FragmentGameBinding.inflate(inflater, container, false);
     binding.moveLeft.setOnClickListener((v) -> playingFieldViewModel.moveLeft());
@@ -60,8 +89,6 @@ public class GameFragment extends Fragment {
     binding.rotateLeft.setOnClickListener((v) -> playingFieldViewModel.rotateLeft());
     binding.rotateRight.setOnClickListener((v) -> playingFieldViewModel.rotateRight());
     binding.drop.setOnClickListener((v) -> playingFieldViewModel.drop());
-    binding.run.setOnClickListener((v) -> playingFieldViewModel.run());
-    binding.stop.setOnClickListener((v) -> playingFieldViewModel.stop());
     binding.showScores.setOnClickListener((v) -> Navigation.findNavController(binding.getRoot())
         .navigate(GameFragmentDirections.navigateToScores(score)));
     // TODO: 10/17/23 Initialize any fields.

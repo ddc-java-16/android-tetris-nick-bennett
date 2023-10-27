@@ -10,15 +10,19 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import edu.cnm.deepdive.tetris.R;
+import edu.cnm.deepdive.tetris.adapter.UserScoresAdapter;
 import edu.cnm.deepdive.tetris.controller.GameFragmentDirections.NavigateToScores;
 import edu.cnm.deepdive.tetris.databinding.FragmentScoresBinding;
+import edu.cnm.deepdive.tetris.viewmodel.ScoreViewModel;
 import org.jetbrains.annotations.NotNull;
 
 public class ScoresFragment extends Fragment {
 
   private FragmentScoresBinding binding;
+  private ScoreViewModel viewModel;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -27,9 +31,8 @@ public class ScoresFragment extends Fragment {
 
   @Override
   public View onCreateView(
-      LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+      @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     binding = FragmentScoresBinding.inflate(inflater, container, false);
-    binding.dummyText.setText(String.valueOf(ScoresFragmentArgs.fromBundle(getArguments()).getScore()));
     // TODO: 10/17/23 Initialize field contents.
     return binding.getRoot();
   }
@@ -37,9 +40,13 @@ public class ScoresFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    // TODO: 10/17/23 Connect to viewmodels and add observers.
+    new ViewModelProvider(requireActivity())
+        .get(ScoreViewModel.class)
+        .getAllScores()
+        .observe(getViewLifecycleOwner(), (scores) ->
+            binding.scores.setAdapter(new UserScoresAdapter(requireContext(), scores)));
+    ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
     //noinspection DataFlowIssue
-    ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setDisplayShowHomeEnabled(true);
   }

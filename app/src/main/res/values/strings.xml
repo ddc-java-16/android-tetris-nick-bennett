@@ -62,5 +62,8 @@
   <string name="score_header">Score</string>
   <string name="rows_removed_header">Rows</string>
   <string name="created_header">Date</string>
+  <string name="run">Run</string>
+  <string name="pause">Pause</string>
+  <string name="new_game">New game</string>
 
 </resources>
