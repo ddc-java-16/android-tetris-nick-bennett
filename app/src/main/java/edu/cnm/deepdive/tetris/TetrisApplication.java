@@ -29,8 +29,6 @@ public class TetrisApplication extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
-    // TODO Add any additional initialization, as required. For example, if not using Hilt, this is
-    //  a good place to invoke static setters in classes designed for singleton instantiation.
   }
 
 }
