@@ -10,6 +10,8 @@ order: 40
 ## Completion state
 {: menu="Completion" }
 
+Something about weird settings still showing.
+
 ## Known deficiencies
 {: menu="Deficiencies" }
 
