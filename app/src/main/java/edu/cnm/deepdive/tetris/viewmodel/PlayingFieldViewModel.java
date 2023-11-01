@@ -3,6 +3,7 @@ package edu.cnm.deepdive.tetris.viewmodel;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -60,6 +61,10 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
     return playingFieldRepository.getDealer();
   }
 
+  public LiveData<Boolean> getRunning() {
+    return Transformations.distinctUntilChanged(playingFieldRepository.getRunning());
+  }
+
   public LiveData<Boolean> getMoveSuccess() {
     return moveSuccess;
   }
@@ -103,6 +108,13 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
 
   public void drop() {
     execute(playingFieldRepository.drop(false));
+  }
+
+  @Override
+  public void onPause(@NonNull LifecycleOwner owner) {
+    DefaultLifecycleObserver.super.onPause(owner);
+    Log.d(getClass().getSimpleName(), "Pausing...");
+    stop();
   }
 
   @Override

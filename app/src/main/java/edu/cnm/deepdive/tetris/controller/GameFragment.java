@@ -37,6 +37,7 @@ public class GameFragment extends Fragment {
   private int rowsRemoved;
   private User currentUser;
   private Boolean inProgress;
+  private boolean running;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,14 @@ public class GameFragment extends Fragment {
   public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
     inflater.inflate(R.menu.game_options, menu);
+  }
+
+  /** @noinspection deprecation*/ // FIXME: 11/1/23 Replace with new recommended approach.
+  @Override
+  public void onPrepareOptionsMenu(@NonNull Menu menu) {
+    super.onPrepareOptionsMenu(menu);
+    menu.findItem(R.id.play).setVisible(!running);
+    menu.findItem(R.id.pause).setVisible(running);
   }
 
   /** @noinspection deprecation*/ // FIXME: 10/27/23 Replace with new recommended approach.
@@ -119,6 +128,7 @@ public class GameFragment extends Fragment {
   private void setupPlayingFieldViewModel(FragmentActivity activity, LifecycleOwner owner) {
     playingFieldViewModel = new ViewModelProvider(activity)
         .get(PlayingFieldViewModel.class);
+    getLifecycle().addObserver(playingFieldViewModel);
     playingFieldViewModel
         .getPlayingField()
         .observe(owner, this::handlePlayingField);
@@ -128,6 +138,9 @@ public class GameFragment extends Fragment {
     playingFieldViewModel
         .getInProgress()
         .observe(owner, this::handleInProgress);
+    playingFieldViewModel
+        .getRunning()
+        .observe(owner, this::handleRunning);
   }
 
   private void handlePlayingField(Field playingField) {
@@ -158,5 +171,14 @@ public class GameFragment extends Fragment {
     this.inProgress = inProgress;
   }
 
+  private void handleRunning(Boolean running) {
+    this.running = running;
+    requireActivity().invalidateOptionsMenu();
+    binding.moveLeft.setEnabled(running);
+    binding.moveRight.setEnabled(running);
+    binding.rotateLeft.setEnabled(running);
+    binding.rotateRight.setEnabled(running);
+    binding.drop.setEnabled(running);
+  }
 
 }

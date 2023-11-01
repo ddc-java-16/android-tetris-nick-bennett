@@ -28,6 +28,7 @@ public class PlayingFieldRepository {
   private final Random rng;
   private final MutableLiveData<Field> playingField;
   private final MutableLiveData<Dealer> dealer;
+  private final MutableLiveData<Boolean> running;
   private final Scheduler moveScheduler;
   private final Scheduler tickScheduler;
   private final Scheduler dropScheduler;
@@ -39,6 +40,7 @@ public class PlayingFieldRepository {
     this.rng = rng;
     playingField = new MutableLiveData<>();
     dealer = new MutableLiveData<>();
+    running = new MutableLiveData<>();
     moveScheduler = Schedulers.single();
     tickScheduler = Schedulers.single();
     dropScheduler = Schedulers.single();
@@ -51,6 +53,7 @@ public class PlayingFieldRepository {
                 .doAfterSuccess((field) -> this.dealer.postValue(dealer))
         )
         .doAfterSuccess(playingField::postValue)
+        .doAfterSuccess((ignore) -> running.postValue(false))
         .ignoreElement()
         .subscribeOn(moveScheduler);
   }
@@ -67,9 +70,11 @@ public class PlayingFieldRepository {
     ticker = BehaviorSubject.createDefault(Boolean.TRUE);
     return ticker
         .filter(Boolean.TRUE::equals)
+        .doAfterNext((ignore) -> running.postValue(true))
         .flatMap((running) -> Observable.just(running)
             .delay(Math.round(field.getSecondsPerTick() * MILLISECONDS_PER_SECOND),
                 TimeUnit.MILLISECONDS, tickScheduler))
+        .doOnComplete(() -> running.postValue(false))
         .observeOn(moveScheduler)
         .map((ignored) -> tick());
   }
@@ -129,6 +134,10 @@ public class PlayingFieldRepository {
 
   public LiveData<Dealer> getDealer() {
     return dealer;
+  }
+
+  public LiveData<Boolean> getRunning() {
+    return running;
   }
 
   private Single<Boolean> move(Supplier<Boolean> supplier) {
