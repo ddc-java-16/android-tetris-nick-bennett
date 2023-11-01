@@ -24,9 +24,9 @@ Please avoid writing too much for the user story. In particular, if the way the 
 
 Here is one (silly) example of an intended user, along with a user story. Please note not only the conceptual structure, but the Markdown syntax used.
 
-* People who like to use randomness in their decision making.
+- People who like to play one-person challenging video games.
 
-    > As someone who enjoys randomness in my life, I need an app that flips a virtual coin or rolls one or more virtual dice, so that I can base my decisions on randomness without having to carry coins or dice in my pockets.
+    > As someone who likes to play a short game when I take a break, and who enjoys Tetris, I want a simple Android-based Tetris game, that keeps a list of my high scores and can be paused and resumed easily.
 
 ## Functionality
 
