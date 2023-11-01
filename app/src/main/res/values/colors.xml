@@ -38,4 +38,6 @@
   <color name="odd_row_background">#20000000</color>
   <color name="even_row_background">@android:color/transparent</color>
 
+  <color name="ic_tetris_launcher_background">#D0E0FF</color>
+
 </resources>
