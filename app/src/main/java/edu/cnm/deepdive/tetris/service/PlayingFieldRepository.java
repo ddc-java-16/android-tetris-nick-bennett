@@ -69,12 +69,12 @@ public class PlayingFieldRepository {
     }
     ticker = BehaviorSubject.createDefault(Boolean.TRUE);
     return ticker
+        .doOnComplete(() -> running.postValue(false))
         .filter(Boolean.TRUE::equals)
         .doAfterNext((ignore) -> running.postValue(true))
         .flatMap((running) -> Observable.just(running)
             .delay(Math.round(field.getSecondsPerTick() * MILLISECONDS_PER_SECOND),
                 TimeUnit.MILLISECONDS, tickScheduler))
-        .doOnComplete(() -> running.postValue(false))
         .observeOn(moveScheduler)
         .map((ignored) -> tick());
   }
