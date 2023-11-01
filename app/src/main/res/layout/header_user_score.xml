@@ -16,7 +16,6 @@
     style="@style/TextAppearance.Material3.TitleMedium"/>
 
   <TextView
-    android:id="@+id/display_name"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/half_static_spacing"
@@ -36,7 +35,6 @@
     style="@style/TextAppearance.Material3.TitleMedium"/>
 
   <TextView
-    android:id="@+id/rows_removed"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/half_static_spacing"

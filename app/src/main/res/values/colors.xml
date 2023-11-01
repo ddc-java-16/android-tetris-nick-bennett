@@ -20,10 +20,6 @@
   <color name="primary_color_dark">#FF3700B3</color>
   <color name="accent_color">#FF03DAC5</color>
 
-  <color name="save">@color/primary_color_dark</color>
-  <color name="cancel">#FFFF0000</color>
-  <color name="disabled">#60000000</color>
-
   <color name="i_shape">#00FFFF</color>
   <color name="j_shape">#6495ED</color>
   <color name="l_shape">#FFA500</color>

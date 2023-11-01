@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 public class PlayingFieldRepository {
 
   private static final int MILLISECONDS_PER_SECOND = 1000;
@@ -160,7 +159,7 @@ public class PlayingFieldRepository {
     }
     playingField.postValue(field);
     boolean stillRunning = moved || !field.isGameOver();
-    if (stillRunning) {
+    if (stillRunning && ticker != null) {
       ticker.onNext(Boolean.TRUE);
     } else {
       clearTicker();

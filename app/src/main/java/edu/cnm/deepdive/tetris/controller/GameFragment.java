@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle.State;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -26,7 +28,7 @@ import edu.cnm.deepdive.tetris.viewmodel.ScoreViewModel;
 import edu.cnm.deepdive.tetris.viewmodel.UserViewModel;
 import java.time.Instant;
 
-public class GameFragment extends Fragment {
+public class GameFragment extends Fragment implements MenuProvider {
 
   private FragmentGameBinding binding;
   private PlayingFieldViewModel playingFieldViewModel;
@@ -43,7 +45,6 @@ public class GameFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     //noinspection deprecation
-    setHasOptionsMenu(true); // FIXME: 10/27/23 Replace with new recommended approach.
   }
 
   @Override
@@ -56,29 +57,26 @@ public class GameFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    requireActivity().addMenuProvider(this, getViewLifecycleOwner(), State.RESUMED);
     setupViewModels();
   }
 
-  /** @noinspection deprecation*/ // FIXME: 10/27/23 Replace with new recommended approach.
   @Override
-  public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-    super.onCreateOptionsMenu(menu, inflater);
-    inflater.inflate(R.menu.game_options, menu);
+  public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+    menuInflater.inflate(R.menu.game_options, menu);
   }
 
-  /** @noinspection deprecation*/ // FIXME: 11/1/23 Replace with new recommended approach.
   @Override
-  public void onPrepareOptionsMenu(@NonNull Menu menu) {
-    super.onPrepareOptionsMenu(menu);
+  public void onPrepareMenu(@NonNull Menu menu) {
+    MenuProvider.super.onPrepareMenu(menu);
     menu.findItem(R.id.play).setVisible(!running);
     menu.findItem(R.id.pause).setVisible(running);
   }
 
-  /** @noinspection deprecation*/ // FIXME: 10/27/23 Replace with new recommended approach.
   @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+  public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
     boolean handled = true;
-    int id = item.getItemId();
+    int id = menuItem.getItemId();
     if (id == R.id.play) {
       playingFieldViewModel.run();
     } else if (id == R.id.pause) {
@@ -86,7 +84,7 @@ public class GameFragment extends Fragment {
     } else if (id == R.id.restart) {
       playingFieldViewModel.create();
     } else {
-      handled = super.onOptionsItemSelected(item);
+      handled = false;
     }
     return handled;
   }
@@ -100,7 +98,6 @@ public class GameFragment extends Fragment {
     binding.drop.setOnClickListener((v) -> playingFieldViewModel.drop());
     binding.showScores.setOnClickListener((v) -> Navigation.findNavController(binding.getRoot())
         .navigate(GameFragmentDirections.navigateToScores(score)));
-    // TODO: 10/17/23 Initialize any fields.
   }
 
   private void setupViewModels() {
@@ -109,20 +106,6 @@ public class GameFragment extends Fragment {
     setupPlayingFieldViewModel(activity, owner);
     setupScoreViewModel(activity, owner);
     setupUserViewModel(activity, owner);
-  }
-
-  private void setupUserViewModel(FragmentActivity activity, LifecycleOwner owner) {
-    userViewModel = new ViewModelProvider(activity)
-        .get(UserViewModel.class);
-    userViewModel
-        .getCurrentUser()
-        .observe(owner, (user) -> this.currentUser = user);
-  }
-
-  private void setupScoreViewModel(FragmentActivity activity, LifecycleOwner owner) {
-    scoreViewModel = new ViewModelProvider(activity)
-        .get(ScoreViewModel.class);
-    // TODO: 10/26/23 Observe scoreId or Score from view model.
   }
 
   private void setupPlayingFieldViewModel(FragmentActivity activity, LifecycleOwner owner) {
@@ -141,6 +124,19 @@ public class GameFragment extends Fragment {
     playingFieldViewModel
         .getRunning()
         .observe(owner, this::handleRunning);
+  }
+
+  private void setupScoreViewModel(FragmentActivity activity, LifecycleOwner owner) {
+    scoreViewModel = new ViewModelProvider(activity)
+        .get(ScoreViewModel.class);
+  }
+
+  private void setupUserViewModel(FragmentActivity activity, LifecycleOwner owner) {
+    userViewModel = new ViewModelProvider(activity)
+        .get(UserViewModel.class);
+    userViewModel
+        .getCurrentUser()
+        .observe(owner, (user) -> this.currentUser = user);
   }
 
   private void handlePlayingField(Field playingField) {
@@ -173,7 +169,7 @@ public class GameFragment extends Fragment {
 
   private void handleRunning(Boolean running) {
     this.running = running;
-    requireActivity().invalidateOptionsMenu();
+    requireActivity().invalidateMenu();
     binding.moveLeft.setEnabled(running);
     binding.moveRight.setEnabled(running);
     binding.rotateLeft.setEnabled(running);

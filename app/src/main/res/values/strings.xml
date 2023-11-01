@@ -22,17 +22,10 @@
   <string name="login_failure_message">Unable to sign in with provided credentials.</string>
   <string name="sign_out">Sign out</string>
 
-  <string name="local_display_name_hint">Local Display Name</string>
-  <string name="google_display_name_hint">Google Display Name</string>
-  <string name="bearer_token_hint">Bearer Token</string>
-  <string name="permissions_granted_hint">Permissions Granted</string>
-
-  <string name="permissions_dialog_title">Permissions Needed</string>
   <string name="settings_label">Settings</string>
 
   <string name="access_fine_location_explanation" tools:keep="@string/access_fine_location_explanation">This app uses location information for …</string>
   <string name="access_coarse_location_explanation" tools:keep="@string/access_coarse_location_explanation">This app uses location information for …</string>
-  <string name="post_notifications_explanation" tools:keep="@string/access_post_notifications_explanation">This app uses notifications for …</string>
   <string name="selectable_text_pref_key">selectable_text_pref</string>
   <string name="selectable_text_pref_title">Selectable text</string>
   <string name="selectable_text_pref_summary_on">Uneditable text is selectable.</string>
@@ -40,12 +33,8 @@
   <string name="playing_field_width_key">playing_field_width</string>
   <string name="playing_field_width_title">Playing field width</string>
 
-  <string name="game_dummy_text">Game fragment</string>
-  <string name="scores_dummy_text">Scores fragment</string>
   <string name="game_fragment_label">Tetris</string>
   <string name="scores_fragment_label">High Scores</string>
-  <string name="scores_label">Scores</string>
-  <string name="game_label">Game</string>
   <string name="move_left">Move left</string>
   <string name="move_right">Move right</string>
   <string name="rotate_left">Rotate left</string>

@@ -40,7 +40,6 @@ android {
                 'runnerBuilder', 'de.mannodermaus.junit5.AndroidJUnit5Builder')
 
         resValue('string', 'app_name', project.appName)
-        resValue('string', 'client_id', getLocalProperty('client_id') ?: '')
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -110,19 +109,8 @@ dependencies {
     annotationProcessor(libs.room.compiler)
     implementation(libs.room.rx.java)
 
-    // Gson (Google JSON parser) library
-    implementation(libs.gson)
-
     // Google Sign-in library
     implementation(libs.play.auth)
-
-    // Retrofit (REST client) with ReactiveX & Gson integration
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.retrofit.adapter.rx.java)
-
-    // Picasso image retrieval library
-    implementation(libs.picasso)
 
     // Hilt dependency-injection library & annotation processor
     implementation(libs.hilt.android.core)
