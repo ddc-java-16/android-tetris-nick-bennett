@@ -20,17 +20,30 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:padding="@dimen/half_dynamic_spacing"
   tools:viewBindingIgnore="true"
   tools:context="edu.cnm.deepdive.tetris.controller.MainActivity">
 
   <androidx.fragment.app.FragmentContainerView
     android:id="@+id/nav_host_fragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
     android:name="androidx.navigation.fragment.NavHostFragment"
     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
     app:defaultNavHost="true"
-    app:navGraph="@navigation/navigation_graph"/>
+    app:navGraph="@navigation/navigation_graph"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/navigator"/>
+
+  <com.google.android.material.bottomnavigation.BottomNavigationView
+    android:id="@+id/navigator"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/windowBackground"
+    app:menu="@menu/navigation_options"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

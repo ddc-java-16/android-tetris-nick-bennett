@@ -27,6 +27,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import dagger.hilt.android.AndroidEntryPoint;
 import edu.cnm.deepdive.tetris.R;
 import edu.cnm.deepdive.tetris.viewmodel.LoginViewModel;
@@ -95,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
     //noinspection DataFlowIssue
     NavController navController = ((NavHostFragment)
         getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)).getNavController();
+    BottomNavigationView navView = findViewById(R.id.navigator);
+    NavigationUI.setupWithNavController(navView, navController);
     NavigationUI.setupActionBarWithNavController(this, navController, config);
   }
 

@@ -96,8 +96,6 @@ public class GameFragment extends Fragment implements MenuProvider {
     binding.rotateLeft.setOnClickListener((v) -> playingFieldViewModel.rotateLeft());
     binding.rotateRight.setOnClickListener((v) -> playingFieldViewModel.rotateRight());
     binding.drop.setOnClickListener((v) -> playingFieldViewModel.drop());
-    binding.showScores.setOnClickListener((v) -> Navigation.findNavController(binding.getRoot())
-        .navigate(GameFragmentDirections.navigateToScores(score)));
   }
 
   private void setupViewModels() {

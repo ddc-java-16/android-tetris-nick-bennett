@@ -214,16 +214,4 @@
     app:layout_constraintRight_toRightOf="parent"
     tools:listitem="@layout/item_next_queue"/>
 
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/show_scores"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/half_static_spacing"
-    android:src="@drawable/high_scores"
-    android:tooltipText="@string/high_scores"
-    app:useCompatPadding="true"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    tools:ignore="ContentDescription"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
