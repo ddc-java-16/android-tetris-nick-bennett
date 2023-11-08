@@ -65,5 +65,7 @@
   <string name="run">Run</string>
   <string name="pause">Pause</string>
   <string name="new_game">New game</string>
+  <string name="play">Play</string>
+  <string name="scores">Scores</string>
 
 </resources>

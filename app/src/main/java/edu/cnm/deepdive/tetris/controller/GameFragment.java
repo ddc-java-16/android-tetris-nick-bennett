@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle.State;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -26,7 +28,7 @@ import edu.cnm.deepdive.tetris.viewmodel.ScoreViewModel;
 import edu.cnm.deepdive.tetris.viewmodel.UserViewModel;
 import java.time.Instant;
 
-public class GameFragment extends Fragment {
+public class GameFragment extends Fragment implements MenuProvider {
 
   private FragmentGameBinding binding;
   private PlayingFieldViewModel playingFieldViewModel;
@@ -40,13 +42,6 @@ public class GameFragment extends Fragment {
   private boolean running;
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    //noinspection deprecation
-    setHasOptionsMenu(true); // FIXME: 10/27/23 Replace with new recommended approach.
-  }
-
-  @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     setupUI(inflater, container);
@@ -56,27 +51,24 @@ public class GameFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    requireActivity().addMenuProvider(this, getViewLifecycleOwner(), State.RESUMED);
     setupViewModels();
   }
 
-  /** @noinspection deprecation*/ // FIXME: 10/27/23 Replace with new recommended approach.
   @Override
-  public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-    super.onCreateOptionsMenu(menu, inflater);
+  public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     inflater.inflate(R.menu.game_options, menu);
   }
 
-  /** @noinspection deprecation*/ // FIXME: 11/1/23 Replace with new recommended approach.
   @Override
-  public void onPrepareOptionsMenu(@NonNull Menu menu) {
-    super.onPrepareOptionsMenu(menu);
+  public void onPrepareMenu(@NonNull Menu menu) {
+    MenuProvider.super.onPrepareMenu(menu);
     menu.findItem(R.id.play).setVisible(!running);
     menu.findItem(R.id.pause).setVisible(running);
   }
 
-  /** @noinspection deprecation*/ // FIXME: 10/27/23 Replace with new recommended approach.
   @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+  public boolean onMenuItemSelected(@NonNull MenuItem item) {
     boolean handled = true;
     int id = item.getItemId();
     if (id == R.id.play) {
@@ -86,7 +78,7 @@ public class GameFragment extends Fragment {
     } else if (id == R.id.restart) {
       playingFieldViewModel.create();
     } else {
-      handled = super.onOptionsItemSelected(item);
+      handled = false;
     }
     return handled;
   }
@@ -98,9 +90,6 @@ public class GameFragment extends Fragment {
     binding.rotateLeft.setOnClickListener((v) -> playingFieldViewModel.rotateLeft());
     binding.rotateRight.setOnClickListener((v) -> playingFieldViewModel.rotateRight());
     binding.drop.setOnClickListener((v) -> playingFieldViewModel.drop());
-    binding.showScores.setOnClickListener((v) -> Navigation.findNavController(binding.getRoot())
-        .navigate(GameFragmentDirections.navigateToScores(score)));
-    // TODO: 10/17/23 Initialize any fields.
   }
 
   private void setupViewModels() {

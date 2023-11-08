@@ -40,10 +40,6 @@ public class ScoresFragment extends Fragment {
         .getAllScores()
         .observe(getViewLifecycleOwner(), (scores) ->
             binding.scores.setAdapter(new UserScoresAdapter(requireContext(), scores)));
-    ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-    //noinspection DataFlowIssue
-    actionBar.setDisplayHomeAsUpEnabled(true);
-    actionBar.setDisplayShowHomeEnabled(true);
   }
 
 }
