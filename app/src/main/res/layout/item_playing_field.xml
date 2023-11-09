@@ -6,5 +6,6 @@
   android:scaleType="centerInside"
   android:adjustViewBounds="true"
   android:src="@drawable/playing_field_brick"
+  android:background="@android:color/white"
   tools:viewBindingIgnore="true"
   tools:ignore="ContentDescription"/>

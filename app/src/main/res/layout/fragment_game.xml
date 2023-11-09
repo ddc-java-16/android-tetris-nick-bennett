@@ -6,6 +6,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:padding="@dimen/half_dynamic_spacing"
+  android:background="#20000000"
   tools:context=".controller.GameFragment">
 
   <androidx.constraintlayout.widget.Guideline
@@ -97,6 +98,9 @@
     android:layout_height="0dp"
     android:layout_margin="@dimen/half_dynamic_spacing"
     android:stretchMode="columnWidth"
+    android:background="@color/brick_outline"
+    android:verticalSpacing="1dp"
+    android:horizontalSpacing="1dp"
     app:layout_constraintWidth_percent="0.75"
     app:layout_constraintBottom_toTopOf="@id/drop"
     app:layout_constraintLeft_toLeftOf="parent"

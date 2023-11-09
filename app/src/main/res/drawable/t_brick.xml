@@ -10,10 +10,6 @@
     android:width="100dp"
     android:height="100dp"/>
 
-  <stroke
-    android:width="1dp"
-    android:color="@color/brick_outline"/>
-
   <solid
     android:color="@color/t_shape"/>
 

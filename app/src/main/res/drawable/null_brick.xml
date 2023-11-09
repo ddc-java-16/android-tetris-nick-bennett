@@ -7,11 +7,4 @@
     android:width="100dp"
     android:height="100dp"/>
 
-  <solid
-    android:color="@color/null_shape"/>
-
-  <stroke
-    android:color="@color/null_outline"
-    android:width="@dimen/brick_outline_width"/>
-
 </shape>
