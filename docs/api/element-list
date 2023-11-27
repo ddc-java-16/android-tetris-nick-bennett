@@ -1,0 +1,11 @@
+edu.cnm.deepdive.tetris
+edu.cnm.deepdive.tetris.adapter
+edu.cnm.deepdive.tetris.controller
+edu.cnm.deepdive.tetris.hilt
+edu.cnm.deepdive.tetris.model
+edu.cnm.deepdive.tetris.model.dao
+edu.cnm.deepdive.tetris.model.entity
+edu.cnm.deepdive.tetris.model.pojo
+edu.cnm.deepdive.tetris.service
+edu.cnm.deepdive.tetris.view
+edu.cnm.deepdive.tetris.viewmodel

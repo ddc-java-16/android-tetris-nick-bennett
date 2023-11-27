@@ -26,7 +26,7 @@ public final class DatabaseModule {
 
   @Provides
   @Singleton
-  TetrisDatabase provideLocalDatabase(@ApplicationContext Context context) {
+  public TetrisDatabase provideLocalDatabase(@ApplicationContext Context context) {
     return Room
         .databaseBuilder(context, TetrisDatabase.class, TetrisDatabase.NAME)
         .addCallback(new TetrisDatabase.Callback())
@@ -35,13 +35,13 @@ public final class DatabaseModule {
 
   @Provides
   @Singleton
-  UserDao provideUserDao(TetrisDatabase database) {
+  public UserDao provideUserDao(TetrisDatabase database) {
     return database.getUserDao();
   }
 
   @Provides
   @Singleton
-  ScoreDao provideScoreDao(TetrisDatabase database) {
+  public ScoreDao provideScoreDao(TetrisDatabase database) {
     return database.getScoreDao();
   }
 

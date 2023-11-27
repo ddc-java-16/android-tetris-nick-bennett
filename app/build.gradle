@@ -181,31 +181,28 @@ android.applicationVariants.configureEach { variant ->
     def task = project.tasks.create("generate${variant.name.capitalize()}Javadoc", Javadoc) {
 
         title = "$appName (${android.defaultConfig.versionName})"
-        group = "ApiDoc"
+        group = "reporting"
         description = "Generates Javadoc for $variant.name."
 
-        source = variant
-                .sourceSets
-                .collect { it.java.sourceFiles }
-                .inject { m, i -> m + i }
+        source = javaCompileProvider.get().source
+        exclude(
+                "**/*Directions.java",
+                "**/*Args.java",
+                "**/databinding/*.java",
+                "**/*_*.java",
+                "**/R.java",
+                "**/BuildConfig*.java"
+        )
+        destinationDir = file("$projectDir/../docs/api")
 
         doFirst {
             //noinspection GroovyAssignabilityCheck
             classpath = project.files(
-                    file(projectDir)
-                            .toPath()
-                            .resolve("build/intermediates/javac/${variant.name}/classes"),
+                    projectDir.toPath().resolve("build/intermediates/javac/${variant.name}/classes"),
                     variant.javaCompileProvider.get().classpath.files,
                     android.getBootClasspath()
             )
         }
-
-        exclude '**/R'
-        exclude '**/R.**'
-        exclude '**/R\$**'
-        exclude '**/BuildConfig*'
-
-        destinationDir = file("$projectDir/../docs/api")
 
         //noinspection GroovyAssignabilityCheck
         options {
