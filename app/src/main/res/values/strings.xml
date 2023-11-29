@@ -67,5 +67,7 @@
   <string name="new_game">New game</string>
   <string name="play">Play</string>
   <string name="scores">Scores</string>
+  <string name="next_queue_length_key">next_queue_length</string>
+  <string name="next_queue_length_title">Next blocks queue length</string>
 
 </resources>

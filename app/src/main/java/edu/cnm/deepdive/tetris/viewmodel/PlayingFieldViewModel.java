@@ -35,6 +35,8 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
   private final CompositeDisposable pending;
   private final String playingFieldWidthKey;
   private final int playingFieldWidthDefault;
+  private final String nextQueueLengthKey;
+  private final int nextQueueLengthDefault;
 
   @Inject
   PlayingFieldViewModel(@ApplicationContext Context context,
@@ -48,8 +50,10 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
     Resources resources = context.getResources();
-    playingFieldWidthDefault = resources.getInteger(R.integer.playing_field_width_default);
     playingFieldWidthKey = resources.getString(R.string.playing_field_width_key);
+    playingFieldWidthDefault = resources.getInteger(R.integer.playing_field_width_default);
+    nextQueueLengthKey = resources.getString(R.string.next_queue_length_key);
+    nextQueueLengthDefault = resources.getInteger(R.integer.next_queue_length_default);
     create();
   }
 
@@ -79,7 +83,8 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
 
   public void create() {
     int width = preferencesRepository.get(playingFieldWidthKey, playingFieldWidthDefault);
-    execute(playingFieldRepository.create(25, width, 5, 5)); // FIXME: 10/9/23 Replace with values from preferences.
+    int nextQueueLength = preferencesRepository.get(nextQueueLengthKey, nextQueueLengthDefault);
+    execute(playingFieldRepository.create(25, width, 5, nextQueueLength));
   }
 
   public void run() {
@@ -113,7 +118,6 @@ public class PlayingFieldViewModel extends ViewModel implements DefaultLifecycle
   @Override
   public void onPause(@NonNull LifecycleOwner owner) {
     DefaultLifecycleObserver.super.onPause(owner);
-    Log.d(getClass().getSimpleName(), "Pausing...");
     stop();
   }
 

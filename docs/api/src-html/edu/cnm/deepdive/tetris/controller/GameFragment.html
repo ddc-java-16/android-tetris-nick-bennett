@@ -55,8 +55,8 @@
 <span class="source-line-no">042</span><span id="line-42">  private boolean running;</span>
 <span class="source-line-no">043</span><span id="line-43"></span>
 <span class="source-line-no">044</span><span id="line-44">  @Override</span>
-<span class="source-line-no">045</span><span id="line-45">  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,</span>
-<span class="source-line-no">046</span><span id="line-46">      Bundle savedInstanceState) {</span>
+<span class="source-line-no">045</span><span id="line-45">  public View onCreateView(</span>
+<span class="source-line-no">046</span><span id="line-46">      @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {</span>
 <span class="source-line-no">047</span><span id="line-47">    setupUI(inflater, container);</span>
 <span class="source-line-no">048</span><span id="line-48">    return binding.getRoot();</span>
 <span class="source-line-no">049</span><span id="line-49">  }</span>
@@ -64,126 +64,122 @@
 <span class="source-line-no">051</span><span id="line-51">  @Override</span>
 <span class="source-line-no">052</span><span id="line-52">  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {</span>
 <span class="source-line-no">053</span><span id="line-53">    super.onViewCreated(view, savedInstanceState);</span>
-<span class="source-line-no">054</span><span id="line-54">    requireActivity().addMenuProvider(this, getViewLifecycleOwner(), State.RESUMED);</span>
-<span class="source-line-no">055</span><span id="line-55">    setupViewModels();</span>
+<span class="source-line-no">054</span><span id="line-54">    setupViewModels();</span>
+<span class="source-line-no">055</span><span id="line-55">    requireActivity().addMenuProvider(this, getViewLifecycleOwner(), State.RESUMED);</span>
 <span class="source-line-no">056</span><span id="line-56">  }</span>
 <span class="source-line-no">057</span><span id="line-57"></span>
 <span class="source-line-no">058</span><span id="line-58">  @Override</span>
-<span class="source-line-no">059</span><span id="line-59">  public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {</span>
-<span class="source-line-no">060</span><span id="line-60">    inflater.inflate(R.menu.game_options, menu);</span>
-<span class="source-line-no">061</span><span id="line-61">  }</span>
-<span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">  @Override</span>
-<span class="source-line-no">064</span><span id="line-64">  public void onPrepareMenu(@NonNull Menu menu) {</span>
-<span class="source-line-no">065</span><span id="line-65">    MenuProvider.super.onPrepareMenu(menu);</span>
-<span class="source-line-no">066</span><span id="line-66">    menu.findItem(R.id.play).setVisible(!running);</span>
-<span class="source-line-no">067</span><span id="line-67">    menu.findItem(R.id.pause).setVisible(running);</span>
-<span class="source-line-no">068</span><span id="line-68">  }</span>
-<span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70">  @Override</span>
-<span class="source-line-no">071</span><span id="line-71">  public boolean onMenuItemSelected(@NonNull MenuItem item) {</span>
-<span class="source-line-no">072</span><span id="line-72">    boolean handled = true;</span>
-<span class="source-line-no">073</span><span id="line-73">    int id = item.getItemId();</span>
-<span class="source-line-no">074</span><span id="line-74">    if (id == R.id.play) {</span>
-<span class="source-line-no">075</span><span id="line-75">      playingFieldViewModel.run();</span>
-<span class="source-line-no">076</span><span id="line-76">    } else if (id == R.id.pause) {</span>
-<span class="source-line-no">077</span><span id="line-77">      playingFieldViewModel.stop();</span>
-<span class="source-line-no">078</span><span id="line-78">    } else if (id == R.id.restart) {</span>
-<span class="source-line-no">079</span><span id="line-79">      playingFieldViewModel.create();</span>
-<span class="source-line-no">080</span><span id="line-80">    } else {</span>
-<span class="source-line-no">081</span><span id="line-81">      handled = false;</span>
-<span class="source-line-no">082</span><span id="line-82">    }</span>
-<span class="source-line-no">083</span><span id="line-83">    return handled;</span>
-<span class="source-line-no">084</span><span id="line-84">  }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">  private void setupUI(LayoutInflater inflater, ViewGroup container) {</span>
-<span class="source-line-no">087</span><span id="line-87">    binding = FragmentGameBinding.inflate(inflater, container, false);</span>
-<span class="source-line-no">088</span><span id="line-88">    binding.moveLeft.setOnClickListener((v) -&gt; playingFieldViewModel.moveLeft());</span>
-<span class="source-line-no">089</span><span id="line-89">    binding.moveRight.setOnClickListener((v) -&gt; playingFieldViewModel.moveRight());</span>
-<span class="source-line-no">090</span><span id="line-90">    binding.rotateLeft.setOnClickListener((v) -&gt; playingFieldViewModel.rotateLeft());</span>
-<span class="source-line-no">091</span><span id="line-91">    binding.rotateRight.setOnClickListener((v) -&gt; playingFieldViewModel.rotateRight());</span>
-<span class="source-line-no">092</span><span id="line-92">    binding.drop.setOnClickListener((v) -&gt; playingFieldViewModel.drop());</span>
-<span class="source-line-no">093</span><span id="line-93">  }</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">  private void setupViewModels() {</span>
-<span class="source-line-no">096</span><span id="line-96">    LifecycleOwner owner = getViewLifecycleOwner();</span>
-<span class="source-line-no">097</span><span id="line-97">    FragmentActivity activity = requireActivity();</span>
-<span class="source-line-no">098</span><span id="line-98">    setupPlayingFieldViewModel(activity, owner);</span>
-<span class="source-line-no">099</span><span id="line-99">    setupScoreViewModel(activity, owner);</span>
-<span class="source-line-no">100</span><span id="line-100">    setupUserViewModel(activity, owner);</span>
-<span class="source-line-no">101</span><span id="line-101">  }</span>
-<span class="source-line-no">102</span><span id="line-102"></span>
-<span class="source-line-no">103</span><span id="line-103">  private void setupUserViewModel(FragmentActivity activity, LifecycleOwner owner) {</span>
-<span class="source-line-no">104</span><span id="line-104">    userViewModel = new ViewModelProvider(activity)</span>
-<span class="source-line-no">105</span><span id="line-105">        .get(UserViewModel.class);</span>
-<span class="source-line-no">106</span><span id="line-106">    userViewModel</span>
-<span class="source-line-no">107</span><span id="line-107">        .getCurrentUser()</span>
-<span class="source-line-no">108</span><span id="line-108">        .observe(owner, (user) -&gt; this.currentUser = user);</span>
-<span class="source-line-no">109</span><span id="line-109">  }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">  private void setupScoreViewModel(FragmentActivity activity, LifecycleOwner owner) {</span>
-<span class="source-line-no">112</span><span id="line-112">    scoreViewModel = new ViewModelProvider(activity)</span>
-<span class="source-line-no">113</span><span id="line-113">        .get(ScoreViewModel.class);</span>
-<span class="source-line-no">114</span><span id="line-114">    // TODO: 10/26/23 Observe scoreId or Score from view model.</span>
-<span class="source-line-no">115</span><span id="line-115">  }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">  private void setupPlayingFieldViewModel(FragmentActivity activity, LifecycleOwner owner) {</span>
-<span class="source-line-no">118</span><span id="line-118">    playingFieldViewModel = new ViewModelProvider(activity)</span>
-<span class="source-line-no">119</span><span id="line-119">        .get(PlayingFieldViewModel.class);</span>
-<span class="source-line-no">120</span><span id="line-120">    getLifecycle().addObserver(playingFieldViewModel);</span>
-<span class="source-line-no">121</span><span id="line-121">    playingFieldViewModel</span>
-<span class="source-line-no">122</span><span id="line-122">        .getPlayingField()</span>
-<span class="source-line-no">123</span><span id="line-123">        .observe(owner, this::handlePlayingField);</span>
-<span class="source-line-no">124</span><span id="line-124">    playingFieldViewModel</span>
-<span class="source-line-no">125</span><span id="line-125">        .getDealer()</span>
-<span class="source-line-no">126</span><span id="line-126">        .observe(owner, this::handleDealer);</span>
-<span class="source-line-no">127</span><span id="line-127">    playingFieldViewModel</span>
-<span class="source-line-no">128</span><span id="line-128">        .getInProgress()</span>
-<span class="source-line-no">129</span><span id="line-129">        .observe(owner, this::handleInProgress);</span>
-<span class="source-line-no">130</span><span id="line-130">    playingFieldViewModel</span>
-<span class="source-line-no">131</span><span id="line-131">        .getRunning()</span>
-<span class="source-line-no">132</span><span id="line-132">        .observe(owner, this::handleRunning);</span>
-<span class="source-line-no">133</span><span id="line-133">  }</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">  private void handlePlayingField(Field playingField) {</span>
-<span class="source-line-no">136</span><span id="line-136">    score = playingField.getScore();</span>
-<span class="source-line-no">137</span><span id="line-137">    level = playingField.getLevel();</span>
-<span class="source-line-no">138</span><span id="line-138">    rowsRemoved = playingField.getRowsRemoved();</span>
-<span class="source-line-no">139</span><span id="line-139">    binding.playingField.post(() -&gt; binding.playingField.setPlayingField(playingField));</span>
-<span class="source-line-no">140</span><span id="line-140">    binding.level.setText(String.valueOf(playingField.getLevel()));</span>
-<span class="source-line-no">141</span><span id="line-141">    binding.rowsRemoved.setText(String.valueOf(playingField.getLevelRowsRemoved()));</span>
-<span class="source-line-no">142</span><span id="line-142">    binding.score.setText(String.valueOf(score));</span>
-<span class="source-line-no">143</span><span id="line-143">    binding.finalScore.setText(getString(R.string.final_score_format, score));</span>
-<span class="source-line-no">144</span><span id="line-144">    binding.gameOverLayout.setVisibility(playingField.isGameOver() ? View.VISIBLE : View.GONE);</span>
-<span class="source-line-no">145</span><span id="line-145">  }</span>
-<span class="source-line-no">146</span><span id="line-146"></span>
-<span class="source-line-no">147</span><span id="line-147">  private void handleDealer(Dealer dealer) {</span>
-<span class="source-line-no">148</span><span id="line-148">    NextQueueAdapter adapter = new NextQueueAdapter(requireContext(), dealer.getQueue());</span>
-<span class="source-line-no">149</span><span id="line-149">    binding.nextQueue.setAdapter(adapter);</span>
-<span class="source-line-no">150</span><span id="line-150">  }</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">  private void handleInProgress(Boolean inProgress) {</span>
-<span class="source-line-no">153</span><span id="line-153">    if (Boolean.FALSE.equals(inProgress) &amp;&amp; Boolean.TRUE.equals(this.inProgress)) {</span>
-<span class="source-line-no">154</span><span id="line-154">      Score score = new Score();</span>
-<span class="source-line-no">155</span><span id="line-155">      score.setStarted(Instant.now()); // FIXME: 10/26/23 This should come from repository.</span>
-<span class="source-line-no">156</span><span id="line-156">      score.setValue(this.score);</span>
-<span class="source-line-no">157</span><span id="line-157">      score.setRowsRemoved(rowsRemoved);</span>
-<span class="source-line-no">158</span><span id="line-158">      scoreViewModel.save(score, currentUser);</span>
-<span class="source-line-no">159</span><span id="line-159">    }</span>
-<span class="source-line-no">160</span><span id="line-160">    this.inProgress = inProgress;</span>
-<span class="source-line-no">161</span><span id="line-161">  }</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">  private void handleRunning(Boolean running) {</span>
-<span class="source-line-no">164</span><span id="line-164">    this.running = running;</span>
-<span class="source-line-no">165</span><span id="line-165">    requireActivity().invalidateOptionsMenu();</span>
-<span class="source-line-no">166</span><span id="line-166">    binding.moveLeft.setEnabled(running);</span>
-<span class="source-line-no">167</span><span id="line-167">    binding.moveRight.setEnabled(running);</span>
-<span class="source-line-no">168</span><span id="line-168">    binding.rotateLeft.setEnabled(running);</span>
-<span class="source-line-no">169</span><span id="line-169">    binding.rotateRight.setEnabled(running);</span>
-<span class="source-line-no">170</span><span id="line-170">    binding.drop.setEnabled(running);</span>
-<span class="source-line-no">171</span><span id="line-171">  }</span>
-<span class="source-line-no">172</span><span id="line-172"></span>
-<span class="source-line-no">173</span><span id="line-173">}</span>
+<span class="source-line-no">059</span><span id="line-59">  public void onDestroyView() {</span>
+<span class="source-line-no">060</span><span id="line-60">    binding = null;</span>
+<span class="source-line-no">061</span><span id="line-61">    super.onDestroyView();</span>
+<span class="source-line-no">062</span><span id="line-62">  }</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">  @Override</span>
+<span class="source-line-no">065</span><span id="line-65">  public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {</span>
+<span class="source-line-no">066</span><span id="line-66">    inflater.inflate(R.menu.game_options, menu);</span>
+<span class="source-line-no">067</span><span id="line-67">  }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">  @Override</span>
+<span class="source-line-no">070</span><span id="line-70">  public void onPrepareMenu(@NonNull Menu menu) {</span>
+<span class="source-line-no">071</span><span id="line-71">    MenuProvider.super.onPrepareMenu(menu);</span>
+<span class="source-line-no">072</span><span id="line-72">    menu.findItem(R.id.play).setVisible(!running);</span>
+<span class="source-line-no">073</span><span id="line-73">    menu.findItem(R.id.pause).setVisible(running);</span>
+<span class="source-line-no">074</span><span id="line-74">  }</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">  @Override</span>
+<span class="source-line-no">077</span><span id="line-77">  public boolean onMenuItemSelected(@NonNull MenuItem item) {</span>
+<span class="source-line-no">078</span><span id="line-78">    boolean handled = true;</span>
+<span class="source-line-no">079</span><span id="line-79">    int id = item.getItemId();</span>
+<span class="source-line-no">080</span><span id="line-80">    if (id == R.id.play) {</span>
+<span class="source-line-no">081</span><span id="line-81">      playingFieldViewModel.run();</span>
+<span class="source-line-no">082</span><span id="line-82">    } else if (id == R.id.pause) {</span>
+<span class="source-line-no">083</span><span id="line-83">      playingFieldViewModel.stop();</span>
+<span class="source-line-no">084</span><span id="line-84">    } else if (id == R.id.restart) {</span>
+<span class="source-line-no">085</span><span id="line-85">      playingFieldViewModel.create();</span>
+<span class="source-line-no">086</span><span id="line-86">    } else {</span>
+<span class="source-line-no">087</span><span id="line-87">      handled = false;</span>
+<span class="source-line-no">088</span><span id="line-88">    }</span>
+<span class="source-line-no">089</span><span id="line-89">    return handled;</span>
+<span class="source-line-no">090</span><span id="line-90">  }</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">  private void setupUI(LayoutInflater inflater, ViewGroup container) {</span>
+<span class="source-line-no">093</span><span id="line-93">    binding = FragmentGameBinding.inflate(inflater, container, false);</span>
+<span class="source-line-no">094</span><span id="line-94">    binding.setLifecycleOwner(getViewLifecycleOwner());</span>
+<span class="source-line-no">095</span><span id="line-95">  }</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">  private void setupViewModels() {</span>
+<span class="source-line-no">098</span><span id="line-98">    LifecycleOwner owner = getViewLifecycleOwner();</span>
+<span class="source-line-no">099</span><span id="line-99">    FragmentActivity activity = requireActivity();</span>
+<span class="source-line-no">100</span><span id="line-100">    setupPlayingFieldViewModel(activity, owner);</span>
+<span class="source-line-no">101</span><span id="line-101">    setupScoreViewModel(activity, owner);</span>
+<span class="source-line-no">102</span><span id="line-102">    setupUserViewModel(activity, owner);</span>
+<span class="source-line-no">103</span><span id="line-103">  }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">  private void setupUserViewModel(FragmentActivity activity, LifecycleOwner owner) {</span>
+<span class="source-line-no">106</span><span id="line-106">    userViewModel = new ViewModelProvider(activity)</span>
+<span class="source-line-no">107</span><span id="line-107">        .get(UserViewModel.class);</span>
+<span class="source-line-no">108</span><span id="line-108">    userViewModel</span>
+<span class="source-line-no">109</span><span id="line-109">        .getCurrentUser()</span>
+<span class="source-line-no">110</span><span id="line-110">        .observe(owner, (user) -&gt; this.currentUser = user);</span>
+<span class="source-line-no">111</span><span id="line-111">  }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">  private void setupScoreViewModel(FragmentActivity activity, LifecycleOwner owner) {</span>
+<span class="source-line-no">114</span><span id="line-114">    scoreViewModel = new ViewModelProvider(activity)</span>
+<span class="source-line-no">115</span><span id="line-115">        .get(ScoreViewModel.class);</span>
+<span class="source-line-no">116</span><span id="line-116">  }</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">  private void setupPlayingFieldViewModel(FragmentActivity activity, LifecycleOwner owner) {</span>
+<span class="source-line-no">119</span><span id="line-119">    playingFieldViewModel = new ViewModelProvider(activity)</span>
+<span class="source-line-no">120</span><span id="line-120">        .get(PlayingFieldViewModel.class);</span>
+<span class="source-line-no">121</span><span id="line-121">    getLifecycle().addObserver(playingFieldViewModel);</span>
+<span class="source-line-no">122</span><span id="line-122">    binding.setPlayingFieldViewModel(playingFieldViewModel);</span>
+<span class="source-line-no">123</span><span id="line-123">    playingFieldViewModel</span>
+<span class="source-line-no">124</span><span id="line-124">        .getPlayingField()</span>
+<span class="source-line-no">125</span><span id="line-125">        .observe(owner, this::handlePlayingField);</span>
+<span class="source-line-no">126</span><span id="line-126">    playingFieldViewModel</span>
+<span class="source-line-no">127</span><span id="line-127">        .getDealer()</span>
+<span class="source-line-no">128</span><span id="line-128">        .observe(owner, this::handleDealer);</span>
+<span class="source-line-no">129</span><span id="line-129">    playingFieldViewModel</span>
+<span class="source-line-no">130</span><span id="line-130">        .getInProgress()</span>
+<span class="source-line-no">131</span><span id="line-131">        .observe(owner, this::handleInProgress);</span>
+<span class="source-line-no">132</span><span id="line-132">    playingFieldViewModel</span>
+<span class="source-line-no">133</span><span id="line-133">        .getRunning()</span>
+<span class="source-line-no">134</span><span id="line-134">        .observe(owner, this::handleRunning);</span>
+<span class="source-line-no">135</span><span id="line-135">  }</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">  private void handlePlayingField(Field playingField) {</span>
+<span class="source-line-no">138</span><span id="line-138">    score = playingField.getScore();</span>
+<span class="source-line-no">139</span><span id="line-139">    level = playingField.getLevel();</span>
+<span class="source-line-no">140</span><span id="line-140">    rowsRemoved = playingField.getRowsRemoved();</span>
+<span class="source-line-no">141</span><span id="line-141">  }</span>
+<span class="source-line-no">142</span><span id="line-142"></span>
+<span class="source-line-no">143</span><span id="line-143">  private void handleDealer(Dealer dealer) {</span>
+<span class="source-line-no">144</span><span id="line-144">    NextQueueAdapter adapter = new NextQueueAdapter(requireContext(), dealer.getQueue());</span>
+<span class="source-line-no">145</span><span id="line-145">    binding.nextQueue.setAdapter(adapter);</span>
+<span class="source-line-no">146</span><span id="line-146">  }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">  private void handleInProgress(Boolean inProgress) {</span>
+<span class="source-line-no">149</span><span id="line-149">    if (Boolean.FALSE.equals(inProgress) &amp;&amp; Boolean.TRUE.equals(this.inProgress)) {</span>
+<span class="source-line-no">150</span><span id="line-150">      Score score = new Score();</span>
+<span class="source-line-no">151</span><span id="line-151">      score.setStarted(Instant.now()); // FIXME: 10/26/23 This should come from repository.</span>
+<span class="source-line-no">152</span><span id="line-152">      score.setValue(this.score);</span>
+<span class="source-line-no">153</span><span id="line-153">      score.setRowsRemoved(rowsRemoved);</span>
+<span class="source-line-no">154</span><span id="line-154">      scoreViewModel.save(score, currentUser);</span>
+<span class="source-line-no">155</span><span id="line-155">    }</span>
+<span class="source-line-no">156</span><span id="line-156">    this.inProgress = inProgress;</span>
+<span class="source-line-no">157</span><span id="line-157">  }</span>
+<span class="source-line-no">158</span><span id="line-158"></span>
+<span class="source-line-no">159</span><span id="line-159">  private void handleRunning(Boolean running) {</span>
+<span class="source-line-no">160</span><span id="line-160">    this.running = running;</span>
+<span class="source-line-no">161</span><span id="line-161">    requireActivity().invalidateOptionsMenu();</span>
+<span class="source-line-no">162</span><span id="line-162">//    binding.moveLeft.setEnabled(running);</span>
+<span class="source-line-no">163</span><span id="line-163">//    binding.moveRight.setEnabled(running);</span>
+<span class="source-line-no">164</span><span id="line-164">//    binding.rotateLeft.setEnabled(running);</span>
+<span class="source-line-no">165</span><span id="line-165">//    binding.rotateRight.setEnabled(running);</span>
+<span class="source-line-no">166</span><span id="line-166">//    binding.drop.setEnabled(running);</span>
+<span class="source-line-no">167</span><span id="line-167">  }</span>
+<span class="source-line-no">168</span><span id="line-168"></span>
+<span class="source-line-no">169</span><span id="line-169">}</span>
 
 
 

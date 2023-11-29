@@ -26,4 +26,12 @@
     android:defaultValue="@integer/playing_field_width_default"
     app:showSeekBarValue="true"/>
 
+  <SeekBarPreference
+    android:key="@string/next_queue_length_key"
+    android:title="@string/next_queue_length_title"
+    app:min="@integer/next_queue_length_min"
+    android:max="@integer/next_queue_length_max"
+    android:defaultValue="@integer/next_queue_length_default"
+    app:showSeekBarValue="true"/>
+
 </PreferenceScreen>

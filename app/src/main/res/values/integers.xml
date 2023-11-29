@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
   <integer name="playing_field_width_min">8</integer>
   <integer name="playing_field_width_max">20</integer>
-  <integer name="playing_field_width_default">12</integer>
+  <integer name="playing_field_width_default">10</integer>
   <integer name="current_block_opacity">255</integer>
   <integer name="ghost_block_opacity">32</integer>
+
+  <integer name="next_queue_length_min">1</integer>
+  <integer name="next_queue_length_default">1</integer>
+  <integer name="next_queue_length_max">7</integer>
+
 </resources>

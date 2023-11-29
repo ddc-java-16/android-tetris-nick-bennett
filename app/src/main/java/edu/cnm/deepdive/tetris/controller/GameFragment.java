@@ -42,8 +42,8 @@ public class GameFragment extends Fragment implements MenuProvider {
   private boolean running;
 
   @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+  public View onCreateView(
+      @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     setupUI(inflater, container);
     return binding.getRoot();
   }
@@ -51,8 +51,14 @@ public class GameFragment extends Fragment implements MenuProvider {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    requireActivity().addMenuProvider(this, getViewLifecycleOwner(), State.RESUMED);
     setupViewModels();
+    requireActivity().addMenuProvider(this, getViewLifecycleOwner(), State.RESUMED);
+  }
+
+  @Override
+  public void onDestroyView() {
+    binding = null;
+    super.onDestroyView();
   }
 
   @Override
@@ -85,11 +91,7 @@ public class GameFragment extends Fragment implements MenuProvider {
 
   private void setupUI(LayoutInflater inflater, ViewGroup container) {
     binding = FragmentGameBinding.inflate(inflater, container, false);
-    binding.moveLeft.setOnClickListener((v) -> playingFieldViewModel.moveLeft());
-    binding.moveRight.setOnClickListener((v) -> playingFieldViewModel.moveRight());
-    binding.rotateLeft.setOnClickListener((v) -> playingFieldViewModel.rotateLeft());
-    binding.rotateRight.setOnClickListener((v) -> playingFieldViewModel.rotateRight());
-    binding.drop.setOnClickListener((v) -> playingFieldViewModel.drop());
+    binding.setLifecycleOwner(getViewLifecycleOwner());
   }
 
   private void setupViewModels() {
@@ -111,13 +113,13 @@ public class GameFragment extends Fragment implements MenuProvider {
   private void setupScoreViewModel(FragmentActivity activity, LifecycleOwner owner) {
     scoreViewModel = new ViewModelProvider(activity)
         .get(ScoreViewModel.class);
-    // TODO: 10/26/23 Observe scoreId or Score from view model.
   }
 
   private void setupPlayingFieldViewModel(FragmentActivity activity, LifecycleOwner owner) {
     playingFieldViewModel = new ViewModelProvider(activity)
         .get(PlayingFieldViewModel.class);
     getLifecycle().addObserver(playingFieldViewModel);
+    binding.setPlayingFieldViewModel(playingFieldViewModel);
     playingFieldViewModel
         .getPlayingField()
         .observe(owner, this::handlePlayingField);
@@ -136,12 +138,6 @@ public class GameFragment extends Fragment implements MenuProvider {
     score = playingField.getScore();
     level = playingField.getLevel();
     rowsRemoved = playingField.getRowsRemoved();
-    binding.playingField.post(() -> binding.playingField.setPlayingField(playingField));
-    binding.level.setText(String.valueOf(playingField.getLevel()));
-    binding.rowsRemoved.setText(String.valueOf(playingField.getLevelRowsRemoved()));
-    binding.score.setText(String.valueOf(score));
-    binding.finalScore.setText(getString(R.string.final_score_format, score));
-    binding.gameOverLayout.setVisibility(playingField.isGameOver() ? View.VISIBLE : View.GONE);
   }
 
   private void handleDealer(Dealer dealer) {
@@ -163,11 +159,11 @@ public class GameFragment extends Fragment implements MenuProvider {
   private void handleRunning(Boolean running) {
     this.running = running;
     requireActivity().invalidateOptionsMenu();
-    binding.moveLeft.setEnabled(running);
-    binding.moveRight.setEnabled(running);
-    binding.rotateLeft.setEnabled(running);
-    binding.rotateRight.setEnabled(running);
-    binding.drop.setEnabled(running);
+//    binding.moveLeft.setEnabled(running);
+//    binding.moveRight.setEnabled(running);
+//    binding.rotateLeft.setEnabled(running);
+//    binding.rotateRight.setEnabled(running);
+//    binding.drop.setEnabled(running);
   }
 
 }

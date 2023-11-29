@@ -41,18 +41,20 @@ public class PlayingFieldView extends GridView {
   }
 
   public void setPlayingField(Field playingField) {
-    this.playingField = playingField;
-    int heightInBricks = playingField.getHeight() - playingField.getBufferHeight();
-    int widthInBricks = playingField.getWidth();
-    int maxBrickHeight = getHeight() / heightInBricks;
-    int maxBrickWidth = getWidth() / widthInBricks;
-    ViewGroup.LayoutParams params = getLayoutParams();
-    int columnSize = Math.min(maxBrickHeight, maxBrickWidth);
-    params.height = columnSize * heightInBricks;
-    params.width = columnSize * widthInBricks;
-    setLayoutParams(params);
-    setNumColumns(widthInBricks);
-    setAdapter(new Adapter(getContext()));
+    if (playingField != null) {
+      this.playingField = playingField;
+      int heightInBricks = playingField.getHeight() - playingField.getBufferHeight();
+      int widthInBricks = playingField.getWidth();
+      int maxBrickHeight = getHeight() / heightInBricks;
+      int maxBrickWidth = getWidth() / widthInBricks;
+      ViewGroup.LayoutParams params = getLayoutParams();
+      int columnSize = Math.min(maxBrickHeight, maxBrickWidth);
+      params.height = columnSize * heightInBricks;
+      params.width = columnSize * widthInBricks;
+      setLayoutParams(params);
+      setNumColumns(widthInBricks);
+      setAdapter(new Adapter(getContext()));
+    }
   }
 
   private class Adapter extends ArrayAdapter<ShapeType> {

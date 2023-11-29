@@ -69,9 +69,8 @@ android {
     }
 
     buildFeatures {
+        dataBinding = true
         viewBinding = true
-        // Enable dataBinding if needed.
-        // dataBinding true
     }
 
 }
@@ -110,26 +109,12 @@ dependencies {
     annotationProcessor(libs.room.compiler)
     implementation(libs.room.rx.java)
 
-    // Gson (Google JSON parser) library
-    implementation(libs.gson)
-
     // Google Sign-in library
     implementation(libs.play.auth)
-
-    // Retrofit (REST client) with ReactiveX & Gson integration
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.retrofit.adapter.rx.java)
-
-    // Picasso image retrieval library
-    implementation(libs.picasso)
 
     // Hilt dependency-injection library & annotation processor
     implementation(libs.hilt.android.core)
     annotationProcessor(libs.hilt.compiler)
-
-    // OkHttp logging dependency
-    implementation(libs.logging.interceptor)
 
     // Libraries for JVM-based testing.
     testImplementation(libs.junit.api)
@@ -147,18 +132,6 @@ dependencies {
     androidTestAnnotationProcessor(libs.hilt.compiler)
     androidTestAnnotationProcessor(libs.hilt.android.compiler)
 
-    constraints {
-        //noinspection ForeignDelegate
-        implementation(libs.kotlin.jdk7) {
-            //noinspection GroovyAssignabilityCheck
-            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
-        }
-        //noinspection ForeignDelegate
-        implementation(libs.kotlin.jdk8) {
-            //noinspection GroovyAssignabilityCheck
-            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
-        }
-    }
 }
 
 clean {
